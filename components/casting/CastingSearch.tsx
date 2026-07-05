@@ -1,0 +1,176 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { Search, Film, Mic, X, SlidersHorizontal } from "lucide-react";
+import { ACTORS, FILTERS, type Actor } from "@/lib/mock";
+import ActorCard from "@/components/cards/ActorCard";
+import { cn } from "@/lib/utils";
+
+type MultiKey = "gender" | "ethnicity" | "hair" | "eyes" | "build";
+
+const CHIP_GROUPS: { key: MultiKey; label: string; options: string[] }[] = [
+  { key: "gender", label: "Gender", options: FILTERS.gender },
+  { key: "build", label: "Body type", options: FILTERS.build },
+  { key: "hair", label: "Hair", options: FILTERS.hair },
+  { key: "eyes", label: "Eyes", options: FILTERS.eyes },
+  { key: "ethnicity", label: "Ethnicity", options: FILTERS.ethnicity },
+];
+
+/** A genuinely working casting search over the roster — the platform's core tool. */
+export default function CastingSearch({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(defaultOpen);
+  const [reels, setReels] = useState({ showreel: false, voicereel: false });
+  const [sel, setSel] = useState<Record<MultiKey, string[]>>({
+    gender: [], ethnicity: [], hair: [], eyes: [], build: [],
+  });
+
+  const toggle = (key: MultiKey, val: string) =>
+    setSel((s) => ({
+      ...s,
+      [key]: s[key].includes(val) ? s[key].filter((v) => v !== val) : [...s[key], val],
+    }));
+
+  const activeCount =
+    Object.values(sel).reduce((n, a) => n + a.length, 0) +
+    (reels.showreel ? 1 : 0) +
+    (reels.voicereel ? 1 : 0);
+
+  const clearAll = () => {
+    setSel({ gender: [], ethnicity: [], hair: [], eyes: [], build: [] });
+    setReels({ showreel: false, voicereel: false });
+    setQuery("");
+  };
+
+  const results = useMemo(() => {
+    return ACTORS.filter((a: Actor) => {
+      if (query && !a.name.toLowerCase().includes(query.toLowerCase())) return false;
+      if (reels.showreel && !a.showreel) return false;
+      if (reels.voicereel && !a.voicereel) return false;
+      for (const { key } of CHIP_GROUPS) {
+        const picks = sel[key];
+        if (!picks.length) continue;
+        const val = key === "ethnicity" ? a.ethnicity : (a[key] as string);
+        // "Any" ethnicity always matches an ethnicity filter
+        if (key === "ethnicity" && picks.includes("Any")) continue;
+        if (!picks.includes(val)) return false;
+      }
+      return true;
+    });
+  }, [query, reels, sel]);
+
+  return (
+    <div className="border border-ash/70 bg-noir-2 frame">
+      {/* Search bar */}
+      <div className="flex flex-col gap-3 border-b border-ash/60 p-4 sm:flex-row sm:items-center">
+        <div className="flex flex-1 items-center gap-3 border border-ash-2 bg-noir px-4 py-3">
+          <Search className="h-4 w-4 shrink-0 text-bone-faint" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search actors by name…"
+            className="w-full bg-transparent text-[0.9rem] text-bone placeholder:text-bone-faint focus:outline-none"
+          />
+          {query && (
+            <button onClick={() => setQuery("")} aria-label="Clear search">
+              <X className="h-4 w-4 text-bone-faint hover:text-bone" />
+            </button>
+          )}
+        </div>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className={cn(
+            "flex items-center justify-center gap-2 border px-4 py-3 text-[0.8rem] transition-colors",
+            open || activeCount
+              ? "border-tungsten/50 text-tungsten"
+              : "border-ash-2 text-bone-dim hover:text-bone",
+          )}
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          Filters
+          {activeCount > 0 && (
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-tungsten px-1.5 text-[0.7rem] font-medium text-noir">
+              {activeCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Filters */}
+      {open && (
+        <div className="space-y-5 border-b border-ash/60 bg-noir/40 p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="kicker mr-2 w-16">Reels</span>
+            <FilterChip active={reels.showreel} onClick={() => setReels((r) => ({ ...r, showreel: !r.showreel }))}>
+              <Film className="h-3 w-3" /> Has showreel
+            </FilterChip>
+            <FilterChip active={reels.voicereel} onClick={() => setReels((r) => ({ ...r, voicereel: !r.voicereel }))}>
+              <Mic className="h-3 w-3" /> Has voice reel
+            </FilterChip>
+          </div>
+
+          {CHIP_GROUPS.map((g) => (
+            <div key={g.key} className="flex flex-wrap items-start gap-2">
+              <span className="kicker mr-2 w-16 shrink-0 pt-1.5">{g.label}</span>
+              <div className="flex flex-wrap gap-2">
+                {g.options.map((opt) => (
+                  <FilterChip key={opt} active={sel[g.key].includes(opt)} onClick={() => toggle(g.key, opt)}>
+                    {opt}
+                  </FilterChip>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Result count */}
+      <div className="flex items-center justify-between px-5 py-4">
+        <p className="font-mono text-[0.72rem] uppercase tracking-[0.14em] text-bone-dim">
+          {results.length} {results.length === 1 ? "actor" : "actors"} match
+        </p>
+        {activeCount > 0 && (
+          <button onClick={clearAll} className="slate hover:text-bone">
+            Clear all
+          </button>
+        )}
+      </div>
+
+      {/* Results */}
+      <div className="grid grid-cols-2 gap-4 p-5 pt-0 sm:grid-cols-3 lg:grid-cols-4">
+        {results.map((a) => (
+          <ActorCard key={a.id} actor={a} />
+        ))}
+        {results.length === 0 && (
+          <p className="col-span-full py-12 text-center text-[0.9rem] text-bone-faint">
+            No actors match those filters. Loosen the brief.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors",
+        active
+          ? "border-tungsten bg-tungsten/10 text-tungsten"
+          : "border-ash-2 text-bone-dim hover:border-bone-faint hover:text-bone",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
