@@ -29,13 +29,18 @@ export default function Pricing() {
         <PricingPlans />
       </section>
 
-      <section className="border-t border-ash/60 bg-noir-2 px-[var(--spacing-gutter)] py-24 md:py-32">
-        <div className="mx-auto max-w-[1500px]">
+      <section className="relative overflow-hidden border-t bg-noir-2 px-[var(--spacing-gutter)] py-24 md:py-32">
+        {/* faint blueprint register behind the questions */}
+        <div
+          aria-hidden
+          className="grid-lines pointer-events-none absolute inset-0 opacity-[0.4] [mask-image:radial-gradient(90%_80%_at_50%_0%,black,transparent_74%)]"
+        />
+        <div className="relative mx-auto max-w-[1500px]">
           <Reveal className="mb-14 text-center">
             <Kicker className="justify-center" index="02">
               Questions
             </Kicker>
-            <h2 className="mt-5 font-display text-[clamp(1.9rem,4vw,3.2rem)] font-light leading-[1.05] text-bone text-balance">
+            <h2 className="mt-5 font-display text-[clamp(1.9rem,4vw,3.2rem)] font-light leading-[1.05] tracking-[-0.03em] text-bone text-balance">
               Everything you might ask.
             </h2>
           </Reveal>

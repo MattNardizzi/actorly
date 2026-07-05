@@ -2,7 +2,7 @@ import { Kicker } from "@/components/ui/bits";
 import { TextReveal, Reveal } from "@/components/fx/Reveal";
 import { cn } from "@/lib/utils";
 
-/** Consistent interior-page hero — keeps every page anchored to the same frame. */
+/** Consistent interior-page hero — anchors every page to the same cold frame. */
 export default function PageHero({
   index,
   kicker,
@@ -24,19 +24,24 @@ export default function PageHero({
 }) {
   const glowColor =
     glow === "rec"
-      ? "rgba(225,68,52,0.13)"
+      ? "rgba(255,68,56,0.14)"
       : glow === "none"
         ? "transparent"
-        : "rgba(232,184,114,0.15)";
+        : "rgba(124,143,255,0.14)";
 
   return (
     <section className="relative overflow-hidden px-[var(--spacing-gutter)] pb-16 pt-[150px] md:pb-24 md:pt-[200px]">
+      {/* faint blueprint register behind the hero */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-[60vh] w-[80vh] -translate-x-1/2 rounded-full opacity-70 blur-[90px]"
+        className="grid-lines pointer-events-none absolute inset-0 opacity-[0.5] [mask-image:radial-gradient(120%_90%_at_50%_0%,black,transparent_72%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-[62vh] w-[82vh] -translate-x-1/2 rounded-full opacity-70 blur-[100px]"
         style={{ background: `radial-gradient(circle, ${glowColor}, transparent 68%)` }}
       />
-      <div className="relative mx-auto max-w-[1500px]">
+      <div className="relative mx-auto max-w-[1600px]">
         <Reveal>
           <div className="flex items-center justify-between">
             <Kicker index={index}>{kicker}</Kicker>
@@ -46,15 +51,15 @@ export default function PageHero({
 
         <h1
           className={cn(
-            "mt-8 max-w-5xl font-display font-light leading-[0.98] tracking-[-0.02em] text-bone text-balance",
-            "text-[clamp(2.4rem,6.5vw,5.5rem)]",
+            "mt-8 max-w-5xl font-display font-light leading-[0.94] tracking-[-0.035em] text-bone text-balance",
+            "text-[clamp(2.6rem,7vw,6rem)]",
           )}
         >
           <TextReveal as="span" className="block" delay={0.08}>
             {title}
           </TextReveal>
           {emphasis && (
-            <TextReveal as="span" className="block italic text-tungsten" delay={0.2}>
+            <TextReveal as="span" className="block text-signal-ink" delay={0.2}>
               {emphasis}
             </TextReveal>
           )}

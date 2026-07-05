@@ -6,6 +6,7 @@ import { Kicker, Tag, Rule } from "@/components/ui/bits";
 import { TextReveal, Reveal, Stagger } from "@/components/fx/Reveal";
 import StatCounter from "@/components/home/StatCounter";
 import CastWall from "@/components/home/CastWall";
+import FaceWall from "@/components/home/FaceWall";
 import Headshot from "@/components/media/Headshot";
 import { ACTORS, STATS } from "@/lib/mock";
 
@@ -13,49 +14,42 @@ export default function Home() {
   return (
     <>
       {/* ===================== HERO ===================== */}
-      <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden pb-16 pt-[72px]">
-        {/* warm key-light behind the headline */}
+      <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden pb-20 pt-[68px]">
+        {/* the living wall of faces */}
+        <FaceWall />
+
+        {/* cold key-light behind the headline */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[38%] h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-[80px]"
+          className="pointer-events-none absolute left-1/2 top-[42%] h-[75vh] w-[75vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-[90px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(232,184,114,0.16), rgba(198,146,74,0.05) 45%, transparent 70%)",
+              "radial-gradient(circle, rgba(124,143,255,0.16), rgba(200,214,255,0.05) 45%, transparent 70%)",
+          }}
+        />
+        {/* reading stage — faces stay vivid up top; the lower canvas resolves to a
+            clean white field where the headline, sub-copy and buttons live. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.30) 28%, rgba(255,255,255,0.9) 54%, #ffffff 72%)",
           }}
         />
 
-        {/* faint back-wall of faces */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 flex h-full items-start justify-center gap-3 overflow-hidden px-4 opacity-[0.14]"
-        >
-          {ACTORS.slice(0, 8).map((a, i) => (
-            <div
-              key={a.id}
-              className="mt-[var(--o)] w-[12%] shrink-0"
-              style={{ ["--o" as string]: `${(i % 4) * 40 + 40}px` }}
-            >
-              <Headshot img={a.img} name={a.name} ratio="tall" priority />
-            </div>
-          ))}
-        </div>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-noir/40 via-noir/70 to-noir"
-        />
-
-        <div className="relative mx-auto w-full max-w-[1500px] px-[var(--spacing-gutter)]">
+        <div className="relative mx-auto w-full max-w-[1600px] px-[var(--spacing-gutter)]">
           <Reveal>
             <Kicker index="01" className="mb-8">
               Formerly castandhire.ie — reborn
             </Kicker>
           </Reveal>
 
-          <h1 className="font-display text-[clamp(2.9rem,9.2vw,8.6rem)] font-light leading-[0.92] tracking-[-0.03em] text-bone">
+          <h1 className="hero-type text-bone">
             <TextReveal as="span" className="block" delay={0.1}>
               Where actors are
             </TextReveal>
-            <TextReveal as="span" className="block italic text-tungsten" delay={0.24}>
+            <TextReveal as="span" className="block text-signal-ink" delay={0.24}>
               seen.
             </TextReveal>
           </h1>
@@ -80,15 +74,15 @@ export default function Home() {
         </div>
 
         {/* scroll cue */}
-        <div className="relative mx-auto mt-16 flex w-full max-w-[1500px] items-center justify-between px-[var(--spacing-gutter)]">
+        <div className="relative mx-auto mt-14 flex w-full max-w-[1600px] items-center gap-4 px-[var(--spacing-gutter)]">
+          <span className="h-8 w-px bg-gradient-to-b from-signal/60 to-transparent" aria-hidden />
           <span className="slate">Scroll — the room is warming up</span>
-          <span className="slate hidden md:block">SCENE 01 · TAKE 01 · ACTORLY.IE</span>
         </div>
       </section>
 
       {/* ===================== STATS ===================== */}
-      <section className="border-y border-ash/60 bg-noir-2 py-20">
-        <div className="mx-auto max-w-[1500px] px-[var(--spacing-gutter)]">
+      <section className="border-y bg-noir-2 py-20">
+        <div className="mx-auto max-w-[1600px] px-[var(--spacing-gutter)]">
           <Stagger className="grid grid-cols-2 gap-10 md:grid-cols-4">
             <StatCounter value={STATS.actors} suffix="+" label="Actors on the roster" />
             <StatCounter value={STATS.castingDirectors} suffix="+" label="Casting professionals" />
@@ -99,12 +93,12 @@ export default function Home() {
       </section>
 
       {/* ===================== TWO AUDIENCES ===================== */}
-      <section className="mx-auto max-w-[1500px] px-[var(--spacing-gutter)] py-24 md:py-32">
+      <section className="mx-auto max-w-[1600px] px-[var(--spacing-gutter)] py-24 md:py-32">
         <Reveal className="mb-14">
           <Kicker index="02">Two sides of the lens</Kicker>
-          <h2 className="mt-5 max-w-4xl font-display text-[clamp(2rem,4.8vw,4rem)] font-light leading-[1.04] text-bone text-balance">
-            One database. The actor building a career, and the director who&rsquo;ll
-            change it.
+          <h2 className="mt-5 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.2rem)] font-light leading-[1.02] tracking-[-0.035em] text-bone text-balance">
+            One database. The actor building a career, and the director who&rsquo;ll{" "}
+            <span className="sheen">change it.</span>
           </h2>
         </Reveal>
 
@@ -128,19 +122,20 @@ export default function Home() {
             <Reveal key={panel.href}>
               <Link
                 href={panel.href}
-                className="group relative flex min-h-[420px] flex-col justify-end overflow-hidden border border-ash/60 bg-noir-2 p-8 transition-colors duration-500 hover:border-tungsten/40 md:min-h-[540px] md:p-10"
+                className="group relative flex min-h-[420px] flex-col justify-end overflow-hidden border bg-noir-2 p-8 transition-all duration-500 hover:-translate-y-1 hover:border-signal/40 md:min-h-[560px] md:p-10"
               >
-                <div className="absolute inset-0 opacity-40 transition-opacity duration-700 group-hover:opacity-60">
+                <div className="absolute inset-0 opacity-40 transition-opacity duration-700 group-hover:opacity-65">
                   <Headshot img={panel.actor.img} name={panel.actor.name} ratio="square" className="h-full" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-noir via-noir/70 to-transparent" />
+                <div className="brackets pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
                 <div className="relative">
                   <div className="mb-5 flex items-center justify-between">
                     <Tag tone="light">{panel.tag}</Tag>
-                    <ArrowUpRight className="h-6 w-6 text-bone-dim transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-tungsten" />
+                    <ArrowUpRight className="h-6 w-6 text-bone-dim transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-signal" />
                   </div>
-                  <h3 className="max-w-md font-display text-[clamp(1.6rem,3vw,2.4rem)] font-light leading-[1.08] text-bone text-balance">
+                  <h3 className="max-w-md font-display text-[clamp(1.6rem,3vw,2.5rem)] font-light leading-[1.06] tracking-[-0.03em] text-bone text-balance">
                     {panel.title}
                   </h3>
                   <p className="mt-4 max-w-md text-[0.95rem] leading-relaxed text-bone-dim text-pretty">
@@ -157,26 +152,26 @@ export default function Home() {
       <CastWall />
 
       {/* ===================== INSTACAST ===================== */}
-      <section className="relative overflow-hidden border-y border-ash/60 bg-noir py-24 md:py-32">
+      <section className="relative overflow-hidden border-y bg-noir py-24 md:py-32">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-1/2 h-[60vh] w-[60vh] -translate-y-1/2 translate-x-1/3 rounded-full opacity-40 blur-[90px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(225,68,52,0.16), transparent 68%)",
+              "radial-gradient(circle, rgba(255,68,56,0.16), transparent 68%)",
           }}
         />
-        <div className="relative mx-auto grid max-w-[1500px] items-center gap-14 px-[var(--spacing-gutter)] md:grid-cols-2">
+        <div className="relative mx-auto grid max-w-[1600px] items-center gap-14 px-[var(--spacing-gutter)] md:grid-cols-2">
           <div>
             <Reveal>
               <div className="mb-6 inline-flex items-center gap-3">
                 <span className="rec-dot h-2.5 w-2.5 rounded-full bg-rec" />
-                <span className="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-rec">
+                <span className="font-mono text-[0.66rem] uppercase tracking-[0.24em] text-rec">
                   Instacast — self-tapes
                 </span>
               </div>
             </Reveal>
-            <h2 className="max-w-lg font-display text-[clamp(2rem,4.5vw,3.6rem)] font-light leading-[1.04] text-bone text-balance">
+            <h2 className="max-w-lg font-display text-[clamp(2rem,4.5vw,3.7rem)] font-light leading-[1.02] tracking-[-0.03em] text-bone text-balance">
               Record at home. In their dashboard by morning.
             </h2>
             <Reveal delay={0.15}>
@@ -190,9 +185,9 @@ export default function Home() {
                   <span className="font-display text-2xl text-bone">€5</span>
                   <span className="slate">per tape</span>
                 </div>
-                <div className="flex items-baseline gap-2 border border-tungsten/40 px-5 py-3">
-                  <span className="font-display text-2xl text-tungsten">€50</span>
-                  <span className="slate text-tungsten/70">unlimited · one year</span>
+                <div className="glow-rec flex items-baseline gap-2 border border-rec/40 px-5 py-3">
+                  <span className="font-display text-2xl text-rec">€50</span>
+                  <span className="slate text-rec/70">unlimited · one year</span>
                 </div>
               </div>
               <div className="mt-8">
@@ -205,21 +200,27 @@ export default function Home() {
 
           {/* mock self-tape frame */}
           <Reveal delay={0.2}>
-            <div className="relative aspect-video overflow-hidden border border-ash-2 bg-char frame">
+            <div className="frame relative aspect-video overflow-hidden border bg-char">
               <Headshot img={ACTORS[5].img} name={ACTORS[5].name} ratio="square" className="h-full" />
-              <div className="absolute inset-0 bg-noir/20" />
+              <div className="absolute inset-0 bg-black/20" />
+              {/* video-still gradients — dark top for chrome, scrim at bottom */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/60 to-transparent"
+              />
+              <div aria-hidden className="scrim-b pointer-events-none absolute inset-0" />
               {/* recording chrome */}
               <div className="absolute left-4 top-4 flex items-center gap-2">
                 <span className="rec-dot h-2.5 w-2.5 rounded-full bg-rec" />
-                <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-bone">
+                <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-rec">
                   REC 00:42
                 </span>
               </div>
-              <div className="absolute right-4 top-4 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-bone-dim">
+              <div className="on-image-dim absolute right-4 top-4 font-mono text-[0.62rem] uppercase tracking-[0.16em]">
                 Bóthar · MARCUS · Take 3
               </div>
               <div className="absolute inset-x-4 bottom-4 flex items-center justify-between">
-                <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-bone-dim">
+                <span className="on-image-dim font-mono text-[0.62rem] uppercase tracking-[0.16em]">
                   {ACTORS[5].name}
                 </span>
                 <span className="flex h-9 w-9 items-center justify-center rounded-full border border-rec/50 text-rec">
@@ -234,15 +235,15 @@ export default function Home() {
       </section>
 
       {/* ===================== HOW IT WORKS ===================== */}
-      <section className="mx-auto max-w-[1500px] px-[var(--spacing-gutter)] py-24 md:py-32">
+      <section className="mx-auto max-w-[1600px] px-[var(--spacing-gutter)] py-24 md:py-32">
         <Reveal className="mb-16">
           <Kicker index="05">The process</Kicker>
-          <h2 className="mt-5 max-w-3xl font-display text-[clamp(2rem,4.5vw,3.6rem)] font-light leading-[1.04] text-bone text-balance">
+          <h2 className="mt-5 max-w-3xl font-display text-[clamp(2rem,4.5vw,3.7rem)] font-light leading-[1.02] tracking-[-0.03em] text-bone text-balance">
             From empty profile to on set, in three moves.
           </h2>
         </Reveal>
 
-        <Stagger className="grid gap-px overflow-hidden border border-ash/60 bg-ash/60 md:grid-cols-3">
+        <Stagger className="grid gap-px overflow-hidden border md:grid-cols-3" >
           {[
             {
               icon: Sparkles,
@@ -263,12 +264,16 @@ export default function Home() {
               body: "Apply with a cover note, send an Instacast self-tape, get shortlisted and messaged — right through the platform.",
             },
           ].map((step) => (
-            <div key={step.n} className="group bg-noir-2 p-8 transition-colors duration-500 hover:bg-char md:p-10">
+            <div
+              key={step.n}
+              className="group relative bg-noir-2 p-8 transition-colors duration-500 hover:bg-char md:p-10"
+              style={{ boxShadow: "0 0 0 1px var(--line)" }}
+            >
               <div className="mb-8 flex items-center justify-between">
-                <step.icon className="h-6 w-6 text-tungsten" strokeWidth={1.4} />
+                <step.icon className="h-6 w-6 text-signal" strokeWidth={1.4} />
                 <span className="font-mono text-[0.9rem] text-bone-faint">{step.n}</span>
               </div>
-              <h3 className="font-display text-[1.5rem] font-light text-bone">{step.title}</h3>
+              <h3 className="font-display text-[1.5rem] font-light tracking-[-0.02em] text-bone">{step.title}</h3>
               <p className="mt-4 text-[0.92rem] leading-relaxed text-bone-dim text-pretty">
                 {step.body}
               </p>
@@ -281,16 +286,20 @@ export default function Home() {
       <section className="relative overflow-hidden py-32 md:py-44">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[80vh] w-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[90px]"
+          className="grid-lines pointer-events-none absolute inset-0 opacity-[0.5] [mask-image:radial-gradient(70%_70%_at_50%_50%,black,transparent_75%)]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[80vh] w-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[100px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(232,184,114,0.14), transparent 68%)",
+              "radial-gradient(circle, rgba(124,143,255,0.14), transparent 68%)",
           }}
         />
-        <div className="relative mx-auto max-w-[1500px] px-[var(--spacing-gutter)] text-center">
+        <div className="relative mx-auto max-w-[1600px] px-[var(--spacing-gutter)] text-center">
           <Kicker className="justify-center">Your move</Kicker>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.6rem,7vw,6rem)] font-light leading-[0.98] tracking-[-0.02em] text-bone text-balance">
-            Step into the light.
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.6rem,7vw,6.5rem)] font-light leading-[0.94] tracking-[-0.04em] text-bone text-balance">
+            Step into the <span className="sheen">light.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-md text-[1.02rem] leading-relaxed text-bone-dim text-pretty">
             Join the actors and casting directors making Irish screen and stage.
@@ -314,7 +323,7 @@ export default function Home() {
 
 /** Viewfinder corner brackets. */
 function Viewfinder() {
-  const corner = "absolute h-5 w-5 border-bone/50";
+  const corner = "absolute h-5 w-5 border-white/45";
   return (
     <div aria-hidden className="pointer-events-none absolute inset-3">
       <span className={`${corner} left-0 top-0 border-l border-t`} />

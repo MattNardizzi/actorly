@@ -84,7 +84,7 @@ export default function ForActors() {
               "Searchable: casting can filter for reels",
               "Plays inline in every application you send",
             ]}
-            media={<Headshot img={ACTORS[13].img} name={ACTORS[13].name} ratio="portrait" className="frame" />}
+            media={<ReelMock />}
           />
         </div>
 
@@ -111,45 +111,48 @@ export default function ForActors() {
       </section>
 
       {/* Activation */}
-      <section className="border-y border-ash/60 bg-noir-2 px-[var(--spacing-gutter)] py-24 md:py-32">
+      <section className="border-y bg-noir-2 px-[var(--spacing-gutter)] py-24 md:py-32">
         <div className="mx-auto max-w-[1500px]">
           <Reveal className="mb-14">
             <Kicker index="07">Getting approved</Kicker>
-            <h2 className="mt-5 max-w-3xl font-display text-[clamp(1.9rem,4vw,3.2rem)] font-light leading-[1.06] text-bone text-balance">
+            <h2 className="mt-5 max-w-3xl font-display text-[clamp(1.9rem,4vw,3.2rem)] font-light leading-[1.06] tracking-[-0.035em] text-bone text-balance">
               A quick review keeps the database real.
             </h2>
-            <p className="mt-5 max-w-xl text-[0.98rem] leading-relaxed text-bone-dim">
+            <p className="mt-5 max-w-xl text-[0.98rem] leading-relaxed text-bone-dim text-pretty">
               To apply for jobs, you&rsquo;re verified by our team once. The minimum
               is small — then request activation and we take it from there.
             </p>
           </Reveal>
 
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className="grid gap-px overflow-hidden border md:grid-cols-3" style={{ background: "var(--line)" }}>
             {[
               { done: true, title: "Avatar headshot", body: "One clear, current headshot as your avatar." },
               { done: true, title: "Past experience", body: "Your credits — imported from your résumé or added by hand." },
               { done: false, title: "Training", body: "Where you trained. The last piece before you request activation." },
             ].map((s, i) => (
-              <div key={s.title} className="border border-ash/60 bg-noir p-7">
-                <div className="mb-5 flex items-center justify-between">
+              <div
+                key={s.title}
+                className="group relative bg-noir p-7 transition-colors duration-500 hover:bg-char"
+              >
+                <div className="mb-6 flex items-center justify-between">
                   {s.done ? (
-                    <CheckCircle2 className="h-6 w-6 text-tungsten" strokeWidth={1.5} />
+                    <CheckCircle2 className="h-6 w-6 text-signal" strokeWidth={1.5} />
                   ) : (
                     <Circle className="h-6 w-6 text-bone-faint" strokeWidth={1.5} />
                   )}
-                  <span className="font-mono text-[0.8rem] text-bone-faint">
+                  <span className="font-mono text-[0.8rem] tracking-[0.08em] text-bone-faint">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </div>
-                <h3 className="font-display text-[1.3rem] font-light text-bone">{s.title}</h3>
-                <p className="mt-3 text-[0.88rem] leading-relaxed text-bone-dim">{s.body}</p>
+                <h3 className="font-display text-[1.3rem] font-light tracking-[-0.02em] text-bone">{s.title}</h3>
+                <p className="mt-3 text-[0.88rem] leading-relaxed text-bone-dim text-pretty">{s.body}</p>
               </div>
             ))}
           </div>
 
-          <Reveal className="mt-10 flex flex-wrap items-center gap-4 border border-tungsten/30 bg-tungsten/[0.04] p-6">
-            <Sparkles className="h-5 w-5 text-tungsten" />
-            <p className="flex-1 text-[0.92rem] text-bone-dim">
+          <Reveal className="glass mt-10 flex flex-wrap items-center gap-4 border border-signal/30 p-6">
+            <Sparkles className="h-5 w-5 text-signal" strokeWidth={1.6} />
+            <p className="flex-1 text-[0.92rem] text-bone-dim text-pretty">
               Minimum met? <span className="text-bone">Request activation</span> and an
               administrator reviews your profile — approving you, or pointing out what to
               polish first.
@@ -166,19 +169,19 @@ export default function ForActors() {
         <div className="mx-auto grid max-w-[1500px] items-center gap-14 md:grid-cols-2">
           <Reveal>
             <Kicker index="08">On your terms</Kicker>
-            <h2 className="mt-5 max-w-md font-display text-[clamp(1.7rem,3.4vw,2.7rem)] font-light leading-[1.08] text-bone text-balance">
+            <h2 className="mt-5 max-w-md font-display text-[clamp(1.7rem,3.4vw,2.7rem)] font-light leading-[1.08] tracking-[-0.03em] text-bone text-balance">
               You decide what reaches you.
             </h2>
-            <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-bone-dim">
+            <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-bone-dim text-pretty">
               New jobs, newsletters, or nothing at all. Change it any time from your
               settings — and give casting directors your number only if you want to be
               reachable by phone.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="border border-ash/70 bg-noir-2 frame">
-              <div className="flex items-center gap-2 border-b border-ash/60 px-5 py-3">
-                <Bell className="h-4 w-4 text-tungsten" />
+            <div className="frame overflow-hidden border bg-noir-2">
+              <div className="flex items-center gap-2 border-b px-5 py-3.5">
+                <Bell className="h-4 w-4 text-signal" strokeWidth={1.6} />
                 <span className="kicker">Notification settings</span>
               </div>
               {[
@@ -186,7 +189,10 @@ export default function ForActors() {
                 { label: "Newsletter", desc: "Industry news, monthly", on: false },
                 { label: "Casting can call me", desc: "Share your number with verified casting", on: true },
               ].map((row) => (
-                <div key={row.label} className="flex items-center justify-between border-b border-ash/40 px-5 py-4 last:border-0">
+                <div
+                  key={row.label}
+                  className="flex items-center justify-between border-b border-[var(--line-soft)] px-5 py-4 transition-colors duration-500 last:border-0 hover:bg-char"
+                >
                   <div>
                     <p className="text-[0.92rem] text-bone">{row.label}</p>
                     <p className="slate">{row.desc}</p>
@@ -213,9 +219,9 @@ export default function ForActors() {
 /* ---- Mock media panels ---- */
 function ResumeDropMock() {
   return (
-    <div className="border border-ash/70 bg-noir-2 p-6 frame">
-      <div className="flex flex-col items-center justify-center gap-3 border border-dashed border-ash-2 bg-noir/50 py-10 text-center">
-        <FileText className="h-8 w-8 text-tungsten" strokeWidth={1.3} />
+    <div className="frame border bg-noir-2 p-6">
+      <div className="flex flex-col items-center justify-center gap-3 border border-dashed border-ash-2 bg-noir/50 py-10 text-center transition-colors duration-500 hover:border-signal/50">
+        <FileText className="h-8 w-8 text-signal" strokeWidth={1.3} />
         <p className="text-[0.9rem] text-bone">Drop your résumé — PDF</p>
         <p className="slate">or browse files</p>
       </div>
@@ -226,7 +232,7 @@ function ResumeDropMock() {
           "Parsed — 9 skills",
         ].map((l) => (
           <div key={l} className="flex items-center gap-2 text-[0.82rem] text-bone-dim">
-            <CheckCircle2 className="h-4 w-4 text-tungsten" strokeWidth={1.6} />
+            <CheckCircle2 className="h-4 w-4 text-signal" strokeWidth={1.6} />
             {l}
           </div>
         ))}
@@ -235,11 +241,40 @@ function ResumeDropMock() {
   );
 }
 
+function ReelMock() {
+  return (
+    <div className="frame relative overflow-hidden border">
+      <Headshot img={ACTORS[13].img} name={ACTORS[13].name} ratio="portrait" />
+      {/* top scrim behind the showreel label */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent" />
+      {/* bottom scrim behind the name / play control */}
+      <div className="scrim-b pointer-events-none absolute inset-x-0 bottom-0 h-28" />
+      <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2">
+        <span className="signal-dot h-2 w-2 rounded-full bg-signal" />
+        <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] on-image">
+          Showreel · 2:14
+        </span>
+      </div>
+      <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-center justify-between">
+        <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] on-image-dim">
+          {ACTORS[13].name}
+        </span>
+        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/35 on-image backdrop-blur-md">
+          <Film className="h-4 w-4" strokeWidth={1.6} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function JobsFeedMock() {
   return (
-    <div className="divide-y divide-ash/50 border border-ash/70 bg-noir-2 frame">
+    <div className="frame divide-y divide-[var(--line-soft)] border bg-noir-2">
       {JOBS.slice(0, 4).map((j) => (
-        <div key={j.id} className="flex items-center justify-between gap-4 p-4">
+        <div
+          key={j.id}
+          className="group flex items-center justify-between gap-4 p-4 transition-colors duration-500 hover:bg-char"
+        >
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[0.92rem] text-bone">{j.title}</span>
@@ -253,7 +288,7 @@ function JobsFeedMock() {
               {j.category} · {j.house}
             </p>
           </div>
-          <span className="shrink-0 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-tungsten">
+          <span className="shrink-0 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-signal-ink transition-colors duration-500 group-hover:text-signal">
             Apply
           </span>
         </div>
@@ -264,21 +299,38 @@ function JobsFeedMock() {
 
 function SelfTapeMock() {
   return (
-    <div className="relative aspect-video overflow-hidden border border-ash-2 bg-char frame">
+    <div className="frame relative aspect-video overflow-hidden border border-ash-2 bg-char">
       <Headshot img={ACTORS[5].img} name={ACTORS[5].name} ratio="square" className="h-full" />
-      <div className="absolute inset-0 bg-noir/25" />
+      {/* top gradient behind REC chrome — reads like a video still */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/60 to-transparent" />
+      {/* bottom scrim behind the take metadata */}
+      <div className="scrim-b pointer-events-none absolute inset-x-0 bottom-0 h-24" />
       <div className="absolute left-4 top-4 flex items-center gap-2">
         <span className="rec-dot h-2.5 w-2.5 rounded-full bg-rec" />
-        <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-bone">REC 00:37</span>
+        <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-rec">REC 00:37</span>
       </div>
       <div className="absolute inset-x-4 bottom-4 flex items-center justify-between">
-        <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-bone-dim">
+        <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] on-image-dim">
           Bóthar · MARCUS
         </span>
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-rec/50 text-rec">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-rec/60 text-rec">
           <Upload className="h-4 w-4" strokeWidth={1.6} />
         </span>
       </div>
+      <Viewfinder />
+    </div>
+  );
+}
+
+/** Viewfinder corner brackets. */
+function Viewfinder() {
+  const corner = "absolute h-5 w-5 border-white/45";
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-3">
+      <span className={`${corner} left-0 top-0 border-l border-t`} />
+      <span className={`${corner} right-0 top-0 border-r border-t`} />
+      <span className={`${corner} bottom-0 left-0 border-b border-l`} />
+      <span className={`${corner} bottom-0 right-0 border-b border-r`} />
     </div>
   );
 }
@@ -286,13 +338,13 @@ function SelfTapeMock() {
 function Toggle({ on }: { on: boolean }) {
   return (
     <span
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors ${
-        on ? "border-tungsten/50 bg-tungsten/20" : "border-ash-2 bg-noir"
+      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors duration-500 ${
+        on ? "border-signal/50 bg-signal/20" : "border-ash-2 bg-noir"
       }`}
     >
       <span
-        className={`absolute h-4 w-4 rounded-full transition-all ${
-          on ? "left-6 bg-tungsten" : "left-1 bg-bone-faint"
+        className={`absolute h-4 w-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          on ? "left-6 bg-signal" : "left-1 bg-bone-faint"
         }`}
       />
     </span>

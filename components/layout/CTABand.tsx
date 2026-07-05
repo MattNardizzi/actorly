@@ -22,14 +22,18 @@ export default function CTABand({
     <section className="relative overflow-hidden py-28 md:py-40">
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 blur-[90px]"
-        style={{ background: "radial-gradient(circle, rgba(232,184,114,0.13), transparent 68%)" }}
+        className="grid-lines pointer-events-none absolute inset-0 opacity-[0.5] [mask-image:radial-gradient(70%_70%_at_50%_50%,black,transparent_75%)]"
       />
-      <div className="relative mx-auto max-w-[1500px] px-[var(--spacing-gutter)] text-center">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[100px]"
+        style={{ background: "radial-gradient(circle, rgba(124,143,255,0.13), transparent 68%)" }}
+      />
+      <div className="relative mx-auto max-w-[1600px] px-[var(--spacing-gutter)] text-center">
         <Reveal>
           <Kicker className="justify-center">{kicker}</Kicker>
         </Reveal>
-        <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.2rem,6vw,5rem)] font-light leading-[1] tracking-[-0.02em] text-bone text-balance">
+        <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2.4rem,6.5vw,5.4rem)] font-light leading-[0.98] tracking-[-0.035em] text-bone text-balance">
           {title}
         </h2>
         {sub && (

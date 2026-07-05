@@ -33,10 +33,10 @@ export default function Contact() {
         <div className="mx-auto grid max-w-[1200px] gap-14 md:grid-cols-[1fr_1.2fr]">
           <Reveal>
             <Kicker index="02">Reach us</Kicker>
-            <div className="mt-8 space-y-6">
+            <div className="mt-8 divide-y divide-[var(--line)] border-y">
               {CHANNELS.map((c) => (
-                <div key={c.label} className="flex items-center gap-4 border-b border-ash/50 pb-6">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ash-2 text-tungsten">
+                <div key={c.label} className="group flex items-center gap-4 py-5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:pl-1">
+                  <span className="glass flex h-11 w-11 items-center justify-center rounded-sm text-signal transition-colors duration-500 group-hover:text-signal-ink">
                     <c.icon className="h-4.5 w-4.5" strokeWidth={1.5} />
                   </span>
                   <div>
@@ -53,7 +53,7 @@ export default function Contact() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="border border-ash/70 bg-noir-2 p-8 frame md:p-10">
+            <div className="frame relative bg-noir-2 p-8 md:p-10">
               <ContactForm />
             </div>
           </Reveal>

@@ -11,9 +11,15 @@ export default function ContactForm() {
 
   if (sent) {
     return (
-      <div className="border border-tungsten/30 bg-tungsten/[0.04] p-10 text-center">
-        <MailCheck className="mx-auto h-10 w-10 text-tungsten" strokeWidth={1.3} />
-        <h2 className="mt-5 font-display text-[1.6rem] font-light text-bone">Message sent</h2>
+      <div className="glow relative overflow-hidden border border-signal/30 bg-signal/[0.04] p-10 text-center">
+        <div className="mb-4 inline-flex items-center gap-2">
+          <span className="signal-dot h-2 w-2 rounded-full bg-signal" aria-hidden />
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.24em] text-signal-ink">
+            Received
+          </span>
+        </div>
+        <MailCheck className="mx-auto h-10 w-10 text-signal" strokeWidth={1.3} />
+        <h2 className="mt-5 font-display text-[1.6rem] font-light tracking-[-0.02em] text-bone">Message sent</h2>
         <p className="mx-auto mt-3 max-w-sm text-[0.9rem] leading-relaxed text-bone-dim">
           Thanks for reaching out — we&rsquo;ll be back to you within a working day.
         </p>
@@ -31,8 +37,8 @@ export default function ContactForm() {
               key={t}
               type="button"
               onClick={() => setTopic(t)}
-              className={`rounded-full border px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.1em] transition-colors ${
-                topic === t ? "border-tungsten bg-tungsten/10 text-tungsten" : "border-ash-2 text-bone-dim hover:text-bone"
+              className={`rounded-full border px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.1em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                topic === t ? "border-signal/60 bg-signal/10 text-signal-ink" : "border-ash-2 text-bone-dim hover:border-signal/40 hover:text-bone"
               }`}
             >
               {t}
@@ -52,7 +58,7 @@ export default function ContactForm() {
           required
           rows={5}
           placeholder="How can we help?"
-          className="w-full resize-none border border-ash-2 bg-noir px-4 py-3 text-[0.9rem] text-bone placeholder:text-bone-faint focus:border-tungsten/50 focus:outline-none"
+          className="w-full resize-none border border-ash-2 bg-noir px-4 py-3 text-[0.9rem] text-bone placeholder:text-bone-faint transition-colors duration-300 focus:border-signal/50 focus:outline-none"
         />
       </label>
 
@@ -85,7 +91,7 @@ function Field({
         type={type}
         placeholder={placeholder}
         required={required}
-        className="w-full border border-ash-2 bg-noir px-4 py-3 text-[0.9rem] text-bone placeholder:text-bone-faint focus:border-tungsten/50 focus:outline-none"
+        className="w-full border border-ash-2 bg-noir px-4 py-3 text-[0.9rem] text-bone placeholder:text-bone-faint transition-colors duration-300 focus:border-signal/50 focus:outline-none"
       />
     </label>
   );

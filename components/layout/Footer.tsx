@@ -45,26 +45,26 @@ const ROLL = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-ash/70 bg-noir">
+    <footer className="relative overflow-hidden border-t bg-noir">
       {/* Credit-roll marquee */}
-      <div className="flex overflow-hidden border-b border-ash/60 py-6">
+      <div className="flex overflow-hidden border-b py-6">
         <div
           className="marquee-track flex shrink-0 items-center gap-16 whitespace-nowrap pr-16"
-          style={{ ["--marquee-dur" as string]: "48s" }}
+          style={{ ["--marquee-dur" as string]: "50s" }}
         >
           {[...ROLL, ...ROLL].map((r, i) => (
             <span
               key={i}
-              className="font-mono text-[0.72rem] uppercase tracking-[0.24em] text-bone-faint"
+              className="font-mono text-[0.66rem] uppercase tracking-[0.28em] text-bone-faint"
             >
               {r}
-              <span className="ml-16 text-tungsten/50">✦</span>
+              <span className="ml-16 text-signal/50">+</span>
             </span>
           ))}
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1500px] px-[var(--spacing-gutter)] py-16">
+      <div className="mx-auto max-w-[1600px] px-[var(--spacing-gutter)] py-16">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Wordmark />
@@ -96,7 +96,7 @@ export default function Footer() {
         <Rule className="my-10" />
 
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-bone-faint">
+          <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-bone-faint">
             © {new Date().getFullYear()} Actorly — Made in Ireland
           </p>
           <div className="flex gap-6">
@@ -104,7 +104,7 @@ export default function Footer() {
               <Link
                 key={t}
                 href="/about"
-                className="link-underline font-mono text-[0.68rem] uppercase tracking-[0.14em] text-bone-faint hover:text-bone-dim"
+                className="link-underline font-mono text-[0.62rem] uppercase tracking-[0.2em] text-bone-faint hover:text-bone-dim"
               >
                 {t}
               </Link>

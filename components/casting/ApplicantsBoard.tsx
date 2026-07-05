@@ -21,7 +21,7 @@ export default function ApplicantsBoard() {
   const toggleFilter = (f: Filter) =>
     setFilters((s) => {
       const n = new Set(s);
-      n.has(f) ? n.delete(f) : n.add(f);
+      if (n.has(f)) n.delete(f); else n.add(f);
       return n;
     });
 
@@ -53,19 +53,19 @@ export default function ApplicantsBoard() {
   ];
 
   return (
-    <div className="border border-ash/60 bg-noir-2">
+    <div className="border bg-noir-2">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ash/60 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b p-5">
         <div>
           <div className="flex items-center gap-2">
             <span className="font-mono text-[0.82rem] uppercase tracking-[0.1em] text-bone">MÁIRE</span>
             <span className="slate">· The Quiet Land</span>
           </div>
-          <p className="slate mt-1">{applicants.length} applicants · {sixes} rated six</p>
+          <p className="slate mt-1"><span className="tabular-nums">{applicants.length}</span> applicants · <span className="tabular-nums">{sixes}</span> rated six</p>
         </div>
         <button
           onClick={() => setSort((s) => (s === "rating" ? "recent" : s === "recent" ? "name" : "rating"))}
-          className="inline-flex items-center gap-2 border border-ash-2 px-3 py-2 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-bone-dim transition-colors hover:text-bone"
+          className="inline-flex items-center gap-2 rounded-[2px] border border-ash-2 px-3 py-2 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-bone-dim transition-colors hover:border-signal/50 hover:text-bone"
         >
           <ArrowDownUp className="h-3.5 w-3.5" />
           {sort === "rating" ? "Rating" : sort === "recent" ? "Most recent" : "A–Z"}
@@ -73,7 +73,7 @@ export default function ApplicantsBoard() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2 border-b border-ash/50 bg-noir/40 p-4">
+      <div className="flex flex-wrap gap-2 border-b bg-noir/40 p-4">
         {FILTER_CHIPS.map((c) => {
           const on = filters.has(c.key);
           return (
@@ -81,8 +81,8 @@ export default function ApplicantsBoard() {
               key={c.key}
               onClick={() => toggleFilter(c.key)}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors",
-                on ? "border-tungsten bg-tungsten/10 text-tungsten" : "border-ash-2 text-bone-dim hover:text-bone",
+                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                on ? "border-signal/60 bg-signal/10 text-signal-ink" : "border-ash-2 text-bone-dim hover:border-bone-faint hover:text-bone",
               )}
             >
               {c.icon && <c.icon className="h-3 w-3" />}
@@ -98,18 +98,19 @@ export default function ApplicantsBoard() {
           const rating = ratings[a.id] ?? 0;
           const isContacted = contacted.has(a.id);
           return (
-            <div key={a.id} className="group overflow-hidden border border-ash/60 bg-noir">
+            <div key={a.id} className="group overflow-hidden border bg-noir transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-signal/40">
               <div className="relative aspect-[3/4] overflow-hidden bg-char">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={face(a.img)} alt={a.name} className="duotone h-full w-full object-cover" />
+                <div className="brackets pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-60" aria-hidden />
                 <div className="absolute right-2 top-2 flex gap-1">
                   {a.showreel && <Badge><Film className="h-3 w-3" /></Badge>}
                   {a.voicereel && <Badge><Mic className="h-3 w-3" /></Badge>}
                   {tapes.has(a.id) && <Badge tone="rec"><Video className="h-3 w-3" /></Badge>}
                 </div>
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-noir to-transparent p-2 pt-6">
-                  <p className="truncate text-[0.82rem] text-bone">{a.name}</p>
-                  <p className="slate truncate">{a.agent ?? "Independent"}</p>
+                <div className="scrim-b absolute inset-x-0 bottom-0 p-2 pt-6">
+                  <p className="on-image truncate text-[0.82rem]">{a.name}</p>
+                  <p className="slate on-image-dim truncate">{a.agent ?? "Independent"}</p>
                 </div>
               </div>
 
@@ -123,7 +124,7 @@ export default function ApplicantsBoard() {
                       aria-label={`Rate ${s}`}
                     >
                       <Star
-                        className={cn("h-3.5 w-3.5 transition-colors", s <= rating ? "text-tungsten" : "text-ash-2 hover:text-bone-faint")}
+                        className={cn("h-3.5 w-3.5 transition-colors", s <= rating ? "text-signal" : "text-ash-2 hover:text-bone-faint")}
                         fill={s <= rating ? "currentColor" : "none"}
                         strokeWidth={1.5}
                       />
@@ -132,10 +133,10 @@ export default function ApplicantsBoard() {
                 </div>
               </div>
               <button
-                onClick={() => setContacted((c) => { const n = new Set(c); n.has(a.id) ? n.delete(a.id) : n.add(a.id); return n; })}
+                onClick={() => setContacted((c) => { const n = new Set(c); if (n.has(a.id)) n.delete(a.id); else n.add(a.id); return n; })}
                 className={cn(
-                  "flex w-full items-center justify-center gap-1.5 border-t border-ash/50 py-2 font-mono text-[0.62rem] uppercase tracking-[0.1em] transition-colors",
-                  isContacted ? "text-tungsten" : "text-bone-faint hover:text-bone",
+                  "flex w-full items-center justify-center gap-1.5 border-t py-2 font-mono text-[0.62rem] uppercase tracking-[0.1em] transition-colors",
+                  isContacted ? "bg-signal/[0.06] text-signal-ink" : "text-bone-faint hover:text-bone",
                 )}
               >
                 {isContacted ? <><Check className="h-3 w-3" /> Contacted</> : "Mark contacted"}
@@ -146,10 +147,10 @@ export default function ApplicantsBoard() {
       </div>
 
       {/* Batch bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-ash/60 bg-noir/40 p-4">
-        <span className="slate">{sixes} favourites (rated six)</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t bg-noir/40 p-4">
+        <span className="slate"><span className="tabular-nums">{sixes}</span> favourites (rated six)</span>
         <div className="flex flex-wrap gap-2">
-          <button className="inline-flex items-center gap-2 rounded-full border border-ash-2 px-4 py-2 text-[0.76rem] text-bone transition-colors hover:border-tungsten hover:text-tungsten">
+          <button className="inline-flex items-center gap-2 rounded-full border border-ash-2 px-4 py-2 text-[0.76rem] text-bone transition-colors hover:border-signal/60 hover:text-signal-ink">
             <Send className="h-3.5 w-3.5" /> Message favourites
           </button>
           <button className="inline-flex items-center gap-2 rounded-full border border-rec/40 bg-rec/10 px-4 py-2 text-[0.76rem] text-rec transition-colors hover:bg-rec/20">
@@ -165,8 +166,8 @@ function Badge({ children, tone = "default" }: { children: React.ReactNode; tone
   return (
     <span
       className={cn(
-        "flex h-6 w-6 items-center justify-center rounded-full border bg-noir/70 backdrop-blur-sm",
-        tone === "rec" ? "border-rec/40 text-rec" : "border-tungsten/30 text-tungsten",
+        "flex h-6 w-6 items-center justify-center rounded-full border bg-black/35 backdrop-blur-sm",
+        tone === "rec" ? "border-white/25 text-rec" : "border-white/25 text-white",
       )}
     >
       {children}

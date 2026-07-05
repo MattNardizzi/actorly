@@ -48,9 +48,9 @@ export default function StatCounter({
 
   return (
     <div ref={ref} className="flex flex-col gap-2">
-      <div className="font-display text-[clamp(2.5rem,5vw,4rem)] font-light leading-none text-bone tabular-nums">
+      <div className="font-display text-[clamp(2.5rem,5vw,4rem)] font-light leading-none tracking-[-0.03em] text-bone tabular-nums">
         {n.toLocaleString("en-IE")}
-        <span className="text-tungsten">{suffix}</span>
+        <span className="text-signal">{suffix}</span>
       </div>
       <div className="kicker">{label}</div>
     </div>

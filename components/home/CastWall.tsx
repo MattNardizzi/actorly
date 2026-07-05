@@ -8,7 +8,7 @@ import { Kicker } from "@/components/ui/bits";
 
 /**
  * The emotional centre: a pinned section you scroll *through* horizontally,
- * a wall of Irish talent developing out of the dark. On small screens / reduced
+ * a wall of Irish talent brought up out of the dark. On small screens / reduced
  * motion it degrades to a native horizontal snap-scroll.
  */
 export default function CastWall() {
@@ -56,9 +56,9 @@ export default function CastWall() {
       <div className="md:flex md:h-screen md:flex-col md:justify-center">
         <div className="mb-12 px-[var(--spacing-gutter)] md:mb-16">
           <Kicker index="03">The cast wall</Kicker>
-          <h2 className="mt-5 max-w-3xl font-display text-[clamp(2rem,4.5vw,3.6rem)] font-light leading-[1.05] text-bone text-balance">
+          <h2 className="mt-5 max-w-3xl font-display text-[clamp(2rem,4.5vw,3.8rem)] font-light leading-[1.02] tracking-[-0.03em] text-bone text-balance">
             Every face on Actorly is a real actor,{" "}
-            <span className="italic text-tungsten">looking for the room.</span>
+            <span className="sheen">looking for the room.</span>
           </h2>
         </div>
 

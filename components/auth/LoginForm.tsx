@@ -15,30 +15,35 @@ export default function LoginForm() {
           type="email"
           required
           placeholder="you@email.ie"
-          className="w-full border border-ash-2 bg-noir px-4 py-3 text-[0.9rem] text-bone placeholder:text-bone-faint focus:border-tungsten/50 focus:outline-none"
+          className="input placeholder:text-bone-faint"
         />
       </label>
 
       <div>
         <div className="mb-2 flex items-center justify-between">
           <span className="kicker">Password</span>
-          <Link href="/login" className="slate hover:text-bone">Forgot?</Link>
+          <Link href="/login" className="slate transition-colors hover:text-signal-ink">Forgot?</Link>
         </div>
-        <div className="flex items-center border border-ash-2 bg-noir px-4 focus-within:border-tungsten/50">
+        <div className="input flex items-center gap-2 !py-0 !pr-2 focus-within:border-signal/60 focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-signal)_12%,transparent)]">
           <input
             type={show ? "text" : "password"}
             required
             placeholder="Your password"
             className="w-full bg-transparent py-3 text-[0.9rem] text-bone placeholder:text-bone-faint focus:outline-none"
           />
-          <button type="button" onClick={() => setShow((s) => !s)} aria-label="Toggle password">
-            {show ? <EyeOff className="h-4 w-4 text-bone-faint" /> : <Eye className="h-4 w-4 text-bone-faint" />}
+          <button
+            type="button"
+            onClick={() => setShow((s) => !s)}
+            aria-label="Toggle password"
+            className="text-bone-faint transition-colors hover:text-signal-ink"
+          >
+            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
       <label className="flex items-center gap-3 text-[0.84rem] text-bone-dim">
-        <input type="checkbox" className="h-4 w-4 accent-[var(--color-tungsten)]" />
+        <input type="checkbox" className="h-4 w-4 accent-[var(--color-signal)]" />
         Keep me signed in
       </label>
 
@@ -51,17 +56,23 @@ export default function LoginForm() {
       </button>
 
       <div className="grid grid-cols-2 gap-3">
-        <Link href="/portal/actor" className="border border-ash-2 py-3 text-center font-mono text-[0.72rem] uppercase tracking-[0.1em] text-bone-dim transition-colors hover:border-tungsten/40 hover:text-tungsten">
+        <Link
+          href="/portal/actor"
+          className="rounded-[2px] border border-ash-2 py-3 text-center font-mono text-[0.72rem] uppercase tracking-[0.1em] text-bone-dim transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-signal/40 hover:text-signal-ink"
+        >
           Actor demo
         </Link>
-        <Link href="/portal/casting" className="border border-ash-2 py-3 text-center font-mono text-[0.72rem] uppercase tracking-[0.1em] text-bone-dim transition-colors hover:border-tungsten/40 hover:text-tungsten">
+        <Link
+          href="/portal/casting"
+          className="rounded-[2px] border border-ash-2 py-3 text-center font-mono text-[0.72rem] uppercase tracking-[0.1em] text-bone-dim transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-signal/40 hover:text-signal-ink"
+        >
           Casting demo
         </Link>
       </div>
 
       <p className="text-center text-[0.86rem] text-bone-dim">
         New to Actorly?{" "}
-        <Link href="/join" className="text-tungsten link-underline">Create an account</Link>
+        <Link href="/join" className="text-signal-ink link-underline">Create an account</Link>
       </p>
     </form>
   );

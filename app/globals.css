@@ -1,60 +1,88 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   ACTORLY · "Screen Test" design system
-   Warm cinematic tokens → Tailwind v4 utilities (bg-noir, text-bone, font-display…)
+   ACTORLY · "THE REGISTER" design system — STARK WHITE
+   A clean, crisp white gallery-instrument. The site is a bright canvas of faces
+   read under gallery light, with a casting-instrument HUD laid over it in thin
+   dark hairlines. Stark white ground, near-black ink, one cold electric signal,
+   recording red reserved for tape. Tokens → Tailwind v4 utilities.
+
+   NOTE ON TOKEN NAMES: the legacy names (noir/bone/tungsten/ash/rec) are kept as
+   the palette API so every existing className resolves — but their VALUES are now
+   LIGHT. `noir` is the white ground; `bone` is the dark ink; `tungsten` is the
+   dark "bright" used for primary buttons. The one chromatic accent is `signal`.
    ========================================================================== */
 @theme {
-  /* — Grounds — */
-  --color-noir: #0b0a08;
-  --color-noir-2: #100d0a;
-  --color-char: #17130d;
-  --color-char-2: #1e1810;
-  --color-ash: #2a2318;
-  --color-ash-2: #3a3122;
+  /* — Grounds — stark white, with a whisper-grey ladder for elevation — */
+  --color-noir: #ffffff;
+  --color-noir-2: #f6f7f9;
+  --color-char: #f0f1f4;
+  --color-char-2: #e8eaee;
+  --color-ash: #e3e5ea;
+  --color-ash-2: #d2d5db;
 
-  /* — Ink — */
-  --color-bone: #efe7d8;
-  --color-bone-dim: #a99e88;
-  --color-bone-faint: #6b6252;
+  /* — Ink — near-black on white — */
+  --color-bone: #0c0d10;
+  --color-bone-dim: #565a63;
+  --color-bone-faint: #8a8e97;
 
-  /* — Light — */
-  --color-tungsten: #e8b872;
-  --color-tungsten-deep: #c6924a;
-  --color-tungsten-soft: #f2d4a0;
+  /* — The "bright" — now DARK: primary buttons / the ink fill (was cold-white) — */
+  --color-tungsten: #0c0d10;
+  --color-tungsten-deep: #000000;
+  --color-tungsten-soft: #2a2c33;
 
-  /* — Record — */
-  --color-rec: #e14434;
-  --color-rec-deep: #b8331f;
+  /* — Signal — the ONE electric accent, tuned for AA on white — */
+  --color-signal: #3646dd;
+  --color-signal-deep: #2331b0;
+  --color-signal-ink: #3646dd;
 
-  /* — Type — */
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-courier), ui-monospace, "Courier New", monospace;
+  /* — Record — recording red, reserved for Instacast / self-tape ONLY — */
+  --color-rec: #e23129;
+  --color-rec-deep: #b71f18;
 
-  /* — Motion — */
+  /* — Type — a technical grotesque, a clean grotesque, a wide HUD mono — */
+  --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-martian), ui-monospace, "SFMono-Regular", monospace;
+
+  /* — Motion — one clock, one curve — */
   --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-inout: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-swift: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* — Rhythm — */
-  --spacing-gutter: clamp(1.25rem, 5vw, 6rem);
+  --spacing-gutter: clamp(1.25rem, 4.5vw, 5.5rem);
 
   /* — Type scale (fluid) — */
-  --text-hero: clamp(3rem, 11vw, 11rem);
-  --text-display: clamp(2.25rem, 6.5vw, 5.5rem);
-  --text-title: clamp(1.75rem, 3.5vw, 3rem);
+  --text-hero: clamp(3rem, 12vw, 12.5rem);
+  --text-display: clamp(2.25rem, 6.5vw, 5.75rem);
+  --text-title: clamp(1.6rem, 3.4vw, 3rem);
+}
+
+/* Non-color design tokens (kept off @theme so they don't emit utilities). */
+:root {
+  color-scheme: light;
+
+  /* Instrument hairlines — near-black at low alpha, for grids / registration ticks. */
+  --line: rgba(12, 13, 16, 0.11);
+  --line-soft: rgba(12, 13, 16, 0.06);
+  --line-strong: rgba(12, 13, 16, 0.2);
+
+  /* Glass surface (frosted panel over the canvas). */
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-line: rgba(12, 13, 16, 0.08);
+
+  /* Dark scrim + light ink for text that sits ON images (theme-independent). */
+  --scrim: rgba(8, 9, 12, 0.62);
+  --on-image: #f4f5f8;
+  --on-image-dim: #c3c6cf;
 }
 
 /* ============================================================================
    Base
    ========================================================================== */
-:root {
-  color-scheme: dark;
-  --grain-opacity: 0.055;
-}
-
 * {
-  border-color: var(--color-ash);
+  border-color: var(--line);
 }
 
 html {
@@ -68,36 +96,36 @@ body {
   background: var(--color-noir);
   color: var(--color-bone);
   font-family: var(--font-sans);
-  font-feature-settings: "kern", "liga", "calt";
+  font-feature-settings: "kern", "liga", "calt", "ss01";
   overflow-x: clip;
   min-height: 100dvh;
 }
 
 ::selection {
-  background: var(--color-tungsten);
-  color: var(--color-noir);
+  background: var(--color-signal);
+  color: #ffffff;
 }
 
-/* Cinematic scrollbar */
+/* Instrument scrollbar — thin, light. */
 ::-webkit-scrollbar {
-  width: 9px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-noir);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-ash);
+  background: var(--color-ash-2);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ash-2);
+  background: var(--color-bone-faint);
 }
 
-/* Focus — visible, on-brand */
+/* Focus — the electric signal, visible, on-brand. */
 :focus-visible {
-  outline: 2px solid var(--color-tungsten);
+  outline: 1.5px solid var(--color-signal);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 /* Lenis */
@@ -120,21 +148,24 @@ html.lenis body {
   font-optical-sizing: auto;
 }
 
-/* Screenwriter's slate — the domain signature */
+/* HUD label — the instrument voice. Wide mono, tracked, uppercase. */
 .kicker {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
+  font-size: 0.66rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--color-bone-dim);
+  font-weight: 500;
 }
 
+/* Slate — the smallest technical metadata (coordinates, takes, timecodes). */
 .slate {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-bone-faint);
+  font-weight: 400;
 }
 
 .text-balance {
@@ -144,37 +175,94 @@ html.lenis body {
   text-wrap: pretty;
 }
 
-/* Big display defaults */
+/* Big display default — dark, tight, elegant. */
 .hero-type {
   font-family: var(--font-display);
   font-size: var(--text-hero);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  font-weight: 350;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  font-weight: 480;
+}
+
+/* A cold sheen for a single emphasized word — dark with a blue shimmer on white. */
+.sheen {
+  background: linear-gradient(
+    92deg,
+    #0c0d10 0%,
+    var(--color-signal) 46%,
+    #101b3a 84%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* ============================================================================
-   Reveal primitives (mask-rise). GSAP animates [data-reveal] children.
-   Fallback: if JS never runs, content is fully visible (progressive enhancement).
+   Reveal primitives — CSS-driven, IO-triggered, FAIL-VISIBLE.
+   Base state (no classes) is fully visible; JS adds .rv-pre just before
+   observing (start position) and .rv-in on entry (transition to settled).
+   CSS transitions can't be killed by a JS ticker — reveals are unstoppable.
+   NOTE: .rv-in rules must stay AFTER .rv-pre rules (equal specificity).
    ========================================================================== */
-.reveal-line {
-  overflow: hidden;
+.rv-mask {
   display: block;
+  overflow: clip;
+  /* room for descenders under tight display line-heights */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
 }
-.reveal-line > span {
+.rv-line {
   display: block;
   will-change: transform;
+  transition: transform var(--rv-dur, 1.15s) var(--ease-cine) var(--rv-delay, 0s);
+}
+.rv-pre .rv-line {
+  transform: translateY(126%);
+}
+.rv-in .rv-line {
+  transform: none;
 }
 
-/* JS marks the root; only then do we hide-before-reveal, so no-JS stays visible */
-[data-reveal-root] .reveal-line > span {
-  transform: translateY(110%);
+.rv-block {
+  transition:
+    opacity var(--rv-dur, 1s) var(--ease-cine) var(--rv-delay, 0s),
+    transform var(--rv-dur, 1s) var(--ease-cine) var(--rv-delay, 0s);
+}
+.rv-block.rv-pre {
+  opacity: 0;
+  transform: translateY(var(--rv-y, 44px));
+}
+.rv-block.rv-in {
+  opacity: 1;
+  transform: none;
+}
+
+.rv-kid {
+  transition:
+    opacity 1s var(--ease-cine),
+    transform 1s var(--ease-cine);
+}
+.rv-pre > .rv-kid {
+  opacity: 0;
+  transform: translateY(var(--rv-y, 40px));
+}
+.rv-in > .rv-kid {
+  opacity: 1;
+  transform: none;
 }
 
 /* ============================================================================
-   Atmosphere
+   Instrument atmosphere
    ========================================================================== */
-/* A warm vignette to seat any section in the dark */
+/* Blueprint grid — a faint hairline lattice, the register the site is drawn on. */
+.grid-lines {
+  background-image:
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Soft edge seat (very subtle on white). */
 .vignette {
   position: relative;
 }
@@ -184,46 +272,103 @@ html.lenis body {
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    120% 80% at 50% 40%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.55) 100%
+    125% 85% at 50% 38%,
+    transparent 55%,
+    rgba(12, 13, 16, 0.05) 100%
   );
 }
 
-/* Hairline divider */
+/* Hairline divider. */
 .rule {
   height: 1px;
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-ash) 12%,
-    var(--color-ash) 88%,
+    var(--line-strong) 12%,
+    var(--line-strong) 88%,
     transparent
   );
 }
 
-/* Film-frame border for media */
-.frame {
-  border: 1px solid var(--color-ash);
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.4),
-    0 40px 80px -40px rgba(0, 0, 0, 0.9);
+/* Frosted instrument panel. */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid var(--glass-line);
 }
 
-/* Tungsten glow */
+/* Media frame — sharp, light, seated with a soft shadow. */
+.frame {
+  border: 1px solid var(--line-strong);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 40px 70px -40px rgba(12, 13, 16, 0.28);
+}
+
+/* Electric-signal glow — sparing, for live / focus moments. */
 .glow {
   box-shadow:
-    0 0 0 1px rgba(232, 184, 114, 0.14),
-    0 20px 60px -20px rgba(232, 184, 114, 0.18);
+    0 0 0 1px color-mix(in srgb, var(--color-signal) 24%, transparent),
+    0 26px 70px -30px color-mix(in srgb, var(--color-signal) 40%, transparent);
 }
 
-/* Duotone treatment for headshots — dark until "developed"/hovered */
+/* Recording glow — Instacast only. */
+.glow-rec {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-rec) 30%, transparent),
+    0 26px 70px -30px color-mix(in srgb, var(--color-rec) 34%, transparent);
+}
+
+/* Registration corner brackets (viewfinder). Apply to a positioned box. */
+.brackets::before,
+.brackets::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  border: 1px solid var(--line-strong);
+}
+.brackets::before {
+  top: 10px;
+  left: 10px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.brackets::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ============================================================================
+   The gallery grade — headshots read desaturated until "brought up" under light.
+   Clean grade on white; resolves to full colour on hover / in-view.
+   ========================================================================== */
 .duotone {
-  filter: grayscale(0.35) contrast(1.08) brightness(0.82) sepia(0.18);
-  transition: filter 0.9s var(--ease-cine);
+  filter: grayscale(0.5) contrast(1.03) brightness(1) saturate(0.82);
+  transition: filter 1s var(--ease-cine), transform 1.2s var(--ease-cine);
 }
 .duotone:hover {
-  filter: grayscale(0) contrast(1.02) brightness(1) sepia(0);
+  filter: grayscale(0) contrast(1.02) brightness(1) saturate(1);
+}
+
+/* Text / scrim helpers for content that sits ON images (theme-independent). */
+.on-image {
+  color: var(--on-image);
+}
+.on-image-dim {
+  color: var(--on-image-dim);
+}
+.scrim-b {
+  background-image: linear-gradient(
+    to top,
+    var(--scrim) 0%,
+    color-mix(in srgb, var(--scrim) 35%, transparent) 40%,
+    transparent 75%
+  );
 }
 
 /* ============================================================================
@@ -248,12 +393,28 @@ html.lenis body {
     transform: scale(1);
   }
   50% {
-    opacity: 0.45;
-    transform: scale(0.82);
+    opacity: 0.4;
+    transform: scale(0.8);
   }
 }
 .rec-dot {
-  animation: rec-pulse 1.6s ease-in-out infinite;
+  animation: rec-pulse 1.5s ease-in-out infinite;
+}
+
+/* Live signal dot */
+@keyframes signal-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-signal) 55%, transparent);
+  }
+  50% {
+    opacity: 0.65;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-signal) 0%, transparent);
+  }
+}
+.signal-dot {
+  animation: signal-pulse 2.4s var(--ease-inout) infinite;
 }
 
 /* Marquee (credit-roll) */
@@ -263,29 +424,42 @@ html.lenis body {
   }
 }
 .marquee-track {
-  animation: marquee var(--marquee-dur, 40s) linear infinite;
+  animation: marquee var(--marquee-dur, 42s) linear infinite;
+}
+
+/* Face-wall column drift — seamless vertical loop over a doubled track. */
+@keyframes col-drift {
+  to {
+    transform: translateY(-50%);
+  }
+}
+.col-drift {
+  animation: col-drift var(--drift-dur, 46s) linear infinite;
 }
 
 .hide-native-cursor {
   cursor: none;
 }
 
-/* Shared form control */
+/* Shared form control — clean, sharp, signal focus. */
 .input {
   width: 100%;
   border: 1px solid var(--color-ash-2);
   background: var(--color-noir);
-  padding: 0.7rem 1rem;
+  padding: 0.72rem 1rem;
   font-size: 0.9rem;
   color: var(--color-bone);
-  transition: border-color 0.3s var(--ease-cine);
+  border-radius: 2px;
+  transition: border-color 0.3s var(--ease-cine),
+    box-shadow 0.3s var(--ease-cine);
 }
 .input::placeholder {
   color: var(--color-bone-faint);
 }
 .input:focus {
   outline: none;
-  border-color: color-mix(in srgb, var(--color-tungsten) 50%, transparent);
+  border-color: color-mix(in srgb, var(--color-signal) 70%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-signal) 12%, transparent);
 }
 select.input {
   appearance: none;
@@ -293,7 +467,7 @@ select.input {
 }
 
 /* ============================================================================
-   Reduced motion — content simply present, no transforms, no grain churn
+   Reduced motion — content simply present, no transforms, no churn
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -304,7 +478,10 @@ select.input {
   [data-reveal-root] .reveal-line > span {
     transform: none !important;
   }
-  .marquee-track {
+  .marquee-track,
+  .rec-dot,
+  .signal-dot,
+  .col-drift {
     animation: none !important;
   }
 }

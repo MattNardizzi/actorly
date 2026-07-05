@@ -60,11 +60,14 @@ export default function CastingSearch({ defaultOpen = false }: { defaultOpen?: b
   }, [query, reels, sel]);
 
   return (
-    <div className="border border-ash/70 bg-noir-2 frame">
+    <div className="frame relative border bg-noir-2">
+      {/* viewfinder corners on the instrument */}
+      <span className="brackets pointer-events-none absolute inset-0 z-10 opacity-70" aria-hidden />
+
       {/* Search bar */}
-      <div className="flex flex-col gap-3 border-b border-ash/60 p-4 sm:flex-row sm:items-center">
-        <div className="flex flex-1 items-center gap-3 border border-ash-2 bg-noir px-4 py-3">
-          <Search className="h-4 w-4 shrink-0 text-bone-faint" />
+      <div className="flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center">
+        <div className="group flex flex-1 items-center gap-3 border border-ash-2 bg-noir px-4 py-3 transition-colors duration-500 focus-within:border-signal/50">
+          <Search className="h-4 w-4 shrink-0 text-bone-faint transition-colors group-focus-within:text-signal" strokeWidth={1.7} />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -73,23 +76,23 @@ export default function CastingSearch({ defaultOpen = false }: { defaultOpen?: b
           />
           {query && (
             <button onClick={() => setQuery("")} aria-label="Clear search">
-              <X className="h-4 w-4 text-bone-faint hover:text-bone" />
+              <X className="h-4 w-4 text-bone-faint transition-colors hover:text-bone" />
             </button>
           )}
         </div>
         <button
           onClick={() => setOpen((o) => !o)}
           className={cn(
-            "flex items-center justify-center gap-2 border px-4 py-3 text-[0.8rem] transition-colors",
+            "flex items-center justify-center gap-2 border px-4 py-3 font-mono text-[0.68rem] uppercase tracking-[0.14em] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
             open || activeCount
-              ? "border-tungsten/50 text-tungsten"
-              : "border-ash-2 text-bone-dim hover:text-bone",
+              ? "border-signal/50 text-signal-ink"
+              : "border-ash-2 text-bone-dim hover:border-bone-faint hover:text-bone",
           )}
         >
-          <SlidersHorizontal className="h-4 w-4" />
+          <SlidersHorizontal className="h-4 w-4" strokeWidth={1.7} />
           Filters
           {activeCount > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-tungsten px-1.5 text-[0.7rem] font-medium text-noir">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full border border-signal/50 bg-signal/15 px-1.5 text-[0.7rem] font-medium text-signal-ink">
               {activeCount}
             </span>
           )}
@@ -98,7 +101,7 @@ export default function CastingSearch({ defaultOpen = false }: { defaultOpen?: b
 
       {/* Filters */}
       {open && (
-        <div className="space-y-5 border-b border-ash/60 bg-noir/40 p-5">
+        <div className="space-y-5 border-b bg-noir/40 p-5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="kicker mr-2 w-16">Reels</span>
             <FilterChip active={reels.showreel} onClick={() => setReels((r) => ({ ...r, showreel: !r.showreel }))}>
@@ -126,11 +129,12 @@ export default function CastingSearch({ defaultOpen = false }: { defaultOpen?: b
 
       {/* Result count */}
       <div className="flex items-center justify-between px-5 py-4">
-        <p className="font-mono text-[0.72rem] uppercase tracking-[0.14em] text-bone-dim">
+        <p className="inline-flex items-center gap-2.5 font-mono text-[0.72rem] uppercase tracking-[0.14em] text-bone-dim">
+          <span className="signal-dot h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
           {results.length} {results.length === 1 ? "actor" : "actors"} match
         </p>
         {activeCount > 0 && (
-          <button onClick={clearAll} className="slate hover:text-bone">
+          <button onClick={clearAll} className="slate transition-colors hover:text-signal-ink">
             Clear all
           </button>
         )}
@@ -164,9 +168,9 @@ function FilterChip({
     <button
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-colors",
+        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.1em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         active
-          ? "border-tungsten bg-tungsten/10 text-tungsten"
+          ? "border-signal/70 bg-signal/10 text-signal-ink"
           : "border-ash-2 text-bone-dim hover:border-bone-faint hover:text-bone",
       )}
     >

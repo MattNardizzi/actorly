@@ -8,7 +8,6 @@ import {
 import PortalShell, { type NavItem } from "@/components/portal/PortalShell";
 import { Tag } from "@/components/ui/bits";
 import { ACTORS, face, STATS } from "@/lib/mock";
-import { cn } from "@/lib/utils";
 
 const NAV: NavItem[] = [
   { key: "activation", label: "Activation queue", icon: ShieldCheck, badge: 4 },
@@ -51,8 +50,8 @@ function ActivationQueue() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center gap-4 border border-ash/60 bg-noir-2 px-5 py-4">
-        <ShieldCheck className="h-5 w-5 text-tungsten" />
+      <div className="flex flex-wrap items-center gap-4 border bg-noir-2 px-5 py-4">
+        <ShieldCheck className="h-5 w-5 text-signal" />
         <p className="flex-1 text-[0.9rem] text-bone-dim">
           <span className="text-bone">{pending.length} actors</span> waiting for verification.
           Approve those who meet the minimum: avatar, past experience and training.
@@ -60,8 +59,9 @@ function ActivationQueue() {
       </div>
 
       {pending.length === 0 && (
-        <div className="border border-ash/60 bg-noir-2 py-16 text-center">
-          <CheckCircle2 className="mx-auto h-10 w-10 text-tungsten" strokeWidth={1.3} />
+        <div className="glow relative overflow-hidden border border-signal/30 bg-signal/[0.04] py-16 text-center">
+          <div className="brackets pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+          <CheckCircle2 className="mx-auto h-10 w-10 text-signal" strokeWidth={1.3} />
           <p className="mt-4 text-[0.95rem] text-bone">Queue clear — every request handled.</p>
         </div>
       )}
@@ -70,12 +70,12 @@ function ActivationQueue() {
         {pending.map((a) => {
           const meetsMin = a.credits.length > 0; // has experience; training assumed present
           return (
-            <div key={a.id} className="flex flex-col gap-5 border border-ash/60 bg-noir-2 p-5 md:flex-row md:items-center">
+            <div key={a.id} className="group flex flex-col gap-5 border bg-noir-2 p-5 transition-colors duration-500 hover:border-signal/30 md:flex-row md:items-center">
               <div className="flex items-center gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={face(a.img)} alt={a.name} className="duotone h-16 w-16 rounded-full object-cover" />
+                <img src={face(a.img)} alt={a.name} className="duotone h-16 w-16 rounded-full object-cover ring-1 ring-inset ring-signal/15" />
                 <div>
-                  <h3 className="font-display text-[1.3rem] font-light text-bone">{a.name}</h3>
+                  <h3 className="font-display text-[1.3rem] font-light tracking-[-0.02em] text-bone">{a.name}</h3>
                   <p className="slate mt-0.5">{a.location} · requested 2 Jul</p>
                 </div>
               </div>
@@ -87,7 +87,7 @@ function ActivationQueue() {
                   { label: "Training", ok: meetsMin },
                 ].map((c) => (
                   <span key={c.label} className="flex items-center gap-1.5 text-[0.8rem]">
-                    {c.ok ? <CheckCircle2 className="h-4 w-4 text-tungsten" /> : <Circle className="h-4 w-4 text-bone-faint" />}
+                    {c.ok ? <CheckCircle2 className="h-4 w-4 text-signal" /> : <Circle className="h-4 w-4 text-bone-faint" />}
                     <span className={c.ok ? "text-bone-dim" : "text-bone-faint"}>{c.label}</span>
                   </span>
                 ))}
@@ -113,11 +113,11 @@ function ActivationQueue() {
       </div>
 
       {Object.keys(decisions).length > 0 && (
-        <div className="border border-ash/60 bg-noir-2">
-          <div className="border-b border-ash/60 px-5 py-4"><span className="kicker">Just handled</span></div>
-          <div className="divide-y divide-ash/40">
+        <div className="border bg-noir-2">
+          <div className="border-b px-5 py-4"><span className="kicker">Just handled</span></div>
+          <div className="divide-y divide-[color:var(--line)]">
             {queue.filter((a) => decisions[a.id]).map((a) => (
-              <div key={a.id} className="flex items-center justify-between px-5 py-3">
+              <div key={a.id} className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-char/50">
                 <span className="text-[0.9rem] text-bone">{a.name}</span>
                 <Tag tone={decisions[a.id] === "approved" ? "light" : "default"}>
                   {decisions[a.id] === "approved" ? "Approved" : "Changes requested"}
@@ -134,13 +134,13 @@ function ActivationQueue() {
 /* ---------------- Members ---------------- */
 function Members() {
   return (
-    <div className="border border-ash/60 bg-noir-2">
-      <div className="hidden grid-cols-[2fr_1.5fr_1.5fr_1fr] gap-4 border-b border-ash/60 px-5 py-3 md:grid">
+    <div className="border bg-noir-2">
+      <div className="hidden grid-cols-[2fr_1.5fr_1.5fr_1fr] gap-4 border-b px-5 py-3 md:grid">
         {["Actor", "Location", "Agent", "Status"].map((h) => <span key={h} className="kicker">{h}</span>)}
       </div>
-      <div className="divide-y divide-ash/40">
+      <div className="divide-y divide-[color:var(--line)]">
         {ACTORS.map((a) => (
-          <div key={a.id} className="grid grid-cols-2 items-center gap-4 px-5 py-3 md:grid-cols-[2fr_1.5fr_1.5fr_1fr]">
+          <div key={a.id} className="grid grid-cols-2 items-center gap-4 px-5 py-3 transition-colors hover:bg-char/50 md:grid-cols-[2fr_1.5fr_1.5fr_1fr]">
             <div className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={face(a.img)} alt="" className="duotone h-9 w-9 rounded-full object-cover" />
@@ -168,9 +168,15 @@ function Reports() {
   ];
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-      {tiles.map((t) => (
-        <div key={t.label} className="border border-ash/60 bg-noir-2 p-6">
-          <p className="font-display text-[2.4rem] font-light leading-none text-bone">{t.value}</p>
+      {tiles.map((t, i) => (
+        <div
+          key={t.label}
+          className="group relative overflow-hidden border bg-noir-2 p-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-signal/40"
+        >
+          <span className="pointer-events-none absolute right-4 top-4 font-mono text-[0.56rem] tracking-[0.16em] text-bone-faint/60">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <p className="font-display text-[2.4rem] font-light leading-none tracking-[-0.02em] text-bone tabular-nums transition-colors group-hover:text-signal-ink">{t.value}</p>
           <p className="slate mt-3">{t.label}</p>
         </div>
       ))}

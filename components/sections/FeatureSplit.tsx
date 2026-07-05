@@ -25,7 +25,7 @@ export default function FeatureSplit({
     <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
       <Reveal className={cn(reverse && "md:order-2")}>
         <Kicker index={index}>{kicker}</Kicker>
-        <h3 className="mt-5 max-w-md font-display text-[clamp(1.7rem,3.4vw,2.7rem)] font-light leading-[1.08] text-bone text-balance">
+        <h3 className="mt-5 max-w-md font-display text-[clamp(1.8rem,3.6vw,2.9rem)] font-light leading-[1.04] tracking-[-0.03em] text-bone text-balance">
           {title}
         </h3>
         <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-bone-dim text-pretty">
@@ -35,7 +35,7 @@ export default function FeatureSplit({
           <ul className="mt-7 space-y-3">
             {bullets.map((b) => (
               <li key={b} className="flex items-start gap-3">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-tungsten" strokeWidth={2} />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-signal" strokeWidth={2} />
                 <span className="text-[0.92rem] text-bone-dim">{b}</span>
               </li>
             ))}

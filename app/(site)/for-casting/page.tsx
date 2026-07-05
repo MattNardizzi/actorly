@@ -8,7 +8,7 @@ import CastingSearch from "@/components/casting/CastingSearch";
 import AgentsCopyTool from "@/components/casting/AgentsCopyTool";
 import Button from "@/components/ui/Button";
 import { Kicker, Tag } from "@/components/ui/bits";
-import { Reveal } from "@/components/fx/Reveal";
+import { Reveal, Stagger } from "@/components/fx/Reveal";
 import { face, JOBS } from "@/lib/mock";
 
 export const metadata: Metadata = {
@@ -42,11 +42,19 @@ export default function ForCasting() {
       <section className="px-[var(--spacing-gutter)] pb-24 md:pb-32">
         <div className="mx-auto max-w-[1500px]">
           <Reveal className="mb-6">
-            <Kicker index="02">Search the database</Kicker>
-            <p className="mt-3 text-[0.9rem] text-bone-faint">
-              This one&rsquo;s live — try the filters. Gender, body type, hair, eyes,
-              ethnicity, reels and more.
-            </p>
+            <div className="flex items-end justify-between gap-6">
+              <div>
+                <Kicker index="02">Search the database</Kicker>
+                <p className="mt-3 text-[0.9rem] text-bone-faint">
+                  This one&rsquo;s live — try the filters. Gender, body type, hair, eyes,
+                  ethnicity, reels and more.
+                </p>
+              </div>
+              <span className="slate hidden shrink-0 items-center gap-2 md:inline-flex">
+                <span className="signal-dot h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
+                LIVE INSTRUMENT
+              </span>
+            </div>
           </Reveal>
           <Reveal>
             <CastingSearch defaultOpen />
@@ -88,7 +96,8 @@ export default function ForCasting() {
           </Reveal>
 
           <div className="grid items-start gap-6 md:grid-cols-[1fr_1.1fr]">
-            <div className="space-y-3">
+            <div role="radiogroup" aria-label="Who gets the job">
+            <Stagger className="space-y-3">
               {[
                 { label: "All actors", desc: "Everyone who matches the role's criteria", n: "8,214 eligible" },
                 { label: "Independent only", desc: "Actors without an agent", n: "3,902 eligible" },
@@ -96,29 +105,36 @@ export default function ForCasting() {
               ].map((o, i) => (
                 <label
                   key={o.label}
-                  className="flex cursor-pointer items-center gap-4 border border-ash/60 bg-noir p-5 transition-colors hover:border-tungsten/40"
+                  role="radio"
+                  aria-checked={i === 0}
+                  tabIndex={i === 0 ? 0 : -1}
+                  className={`group flex cursor-pointer items-center gap-4 border bg-noir p-5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-signal/40 ${
+                    i === 0 ? "border-signal/40 bg-signal/[0.04]" : "border-ash/60"
+                  }`}
                 >
                   <span
-                    className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                      i === 0 ? "border-tungsten" : "border-ash-2"
+                    aria-hidden
+                    className={`flex h-5 w-5 items-center justify-center rounded-full border transition-colors ${
+                      i === 0 ? "border-signal" : "border-ash-2 group-hover:border-bone-faint"
                     }`}
                   >
-                    {i === 0 && <span className="h-2.5 w-2.5 rounded-full bg-tungsten" />}
+                    {i === 0 && <span className="signal-dot h-2.5 w-2.5 rounded-full bg-signal" />}
                   </span>
                   <span className="flex-1">
                     <span className="block text-[0.95rem] text-bone">{o.label}</span>
                     <span className="slate">{o.desc}</span>
                   </span>
-                  <span className="font-mono text-[0.7rem] text-bone-faint">{o.n}</span>
+                  <span className="font-mono text-[0.7rem] text-bone-faint transition-colors group-hover:text-bone-dim">{o.n}</span>
                 </label>
               ))}
               <div className="flex items-center gap-3 border border-ash/60 bg-noir/50 p-5">
-                <Send className="h-4 w-4 text-tungsten" />
+                <Send className="h-4 w-4 shrink-0 text-signal" strokeWidth={1.6} />
                 <p className="text-[0.86rem] text-bone-dim">
                   Actors get an email only if they fit the role — right gender, right
                   playing age. No spray-and-pray.
                 </p>
               </div>
+            </Stagger>
             </div>
 
             <Reveal delay={0.1}>
@@ -200,9 +216,13 @@ export default function ForCasting() {
 function JobPostMock() {
   const job = JOBS[0];
   return (
-    <div className="border border-ash/70 bg-noir-2 frame">
-      <div className="flex items-center justify-between border-b border-ash/60 px-5 py-3">
-        <span className="kicker">New casting call</span>
+    <div className="frame relative border bg-noir-2">
+      <span className="brackets pointer-events-none absolute inset-0 opacity-60" aria-hidden />
+      <div className="flex items-center justify-between border-b px-5 py-3">
+        <span className="kicker inline-flex items-center gap-2">
+          <span className="signal-dot h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
+          New casting call
+        </span>
         <Tag tone="light">Draft</Tag>
       </div>
       <div className="space-y-4 p-5">
@@ -216,7 +236,7 @@ function JobPostMock() {
           <p className="kicker mb-3">Roles</p>
           <div className="space-y-2">
             {job.roles.map((r) => (
-              <div key={r.name} className="flex items-center justify-between gap-2 border border-ash/50 bg-noir px-3 py-2.5">
+              <div key={r.name} className="group flex items-center justify-between gap-2 border border-ash/50 bg-noir px-3 py-2.5 transition-colors duration-500 hover:border-signal/40">
                 <div>
                   <span className="font-mono text-[0.74rem] uppercase tracking-[0.1em] text-bone">{r.name}</span>
                   <p className="slate mt-0.5">{r.gender} · {r.ageRange}</p>
@@ -235,7 +255,7 @@ function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <p className="kicker mb-1.5">{label}</p>
-      <div className="border border-ash-2 bg-noir px-3 py-2.5 text-[0.86rem] text-bone">{value}</div>
+      <div className="border border-ash-2 bg-noir px-3 py-2.5 text-[0.86rem] text-bone transition-colors duration-500 hover:border-ash-2/80">{value}</div>
     </div>
   );
 }
@@ -243,22 +263,24 @@ function Field({ label, value }: { label: string; value: string }) {
 function ApplicantsMock() {
   const imgs = [5, 12, 9, 44, 33, 20];
   return (
-    <div className="border border-ash/70 bg-noir-2 p-5 frame">
+    <div className="frame relative border bg-noir-2 p-5">
+      <span className="brackets pointer-events-none absolute inset-0 opacity-60" aria-hidden />
       <div className="mb-4 flex items-center gap-2">
-        <Users className="h-4 w-4 text-tungsten" />
+        <Users className="h-4 w-4 text-signal" strokeWidth={1.6} />
         <span className="kicker">MÁIRE · 214 applicants</span>
       </div>
       <div className="grid grid-cols-3 gap-3">
         {imgs.map((n, i) => (
-          <div key={n} className="group relative aspect-[3/4] overflow-hidden border border-ash/60 bg-char">
+          <div key={n} className="group relative aspect-[3/4] overflow-hidden border border-ash/60 bg-char transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-signal/40">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={face(n)} alt="Applicant thumbnail" className="duotone h-full w-full object-cover" />
-            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-noir/80 px-2 py-1.5">
+            <span className="scrim-b pointer-events-none absolute inset-x-0 bottom-0 h-2/5" aria-hidden />
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-2 py-1.5">
               <div className="flex gap-0.5">
                 {[1, 2, 3, 4, 5, 6].map((s) => (
                   <Star
                     key={s}
-                    className={`h-2.5 w-2.5 ${s <= ((i % 6) + 1) ? "text-tungsten" : "text-ash-2"}`}
+                    className={`h-2.5 w-2.5 ${s <= ((i % 6) + 1) ? "text-signal" : "text-white/40"}`}
                     fill={s <= ((i % 6) + 1) ? "currentColor" : "none"}
                     strokeWidth={1.5}
                   />
@@ -275,31 +297,37 @@ function ApplicantsMock() {
 function TapeGridMock() {
   const imgs = [15, 60, 25];
   return (
-    <div className="border border-ash/70 bg-noir-2 p-5 frame">
+    <div className="frame relative border bg-noir-2 p-5">
+      <span className="brackets pointer-events-none absolute inset-0 opacity-60" aria-hidden />
       <div className="mb-4 flex items-center gap-2">
         <span className="rec-dot h-2 w-2 rounded-full bg-rec" />
         <span className="kicker">Self-tapes · SEÁN</span>
       </div>
       <div className="space-y-3">
         {imgs.map((n, i) => (
-          <div key={n} className="flex items-center gap-3 border border-ash/60 bg-noir p-3">
+          <div key={n} className="group flex items-center gap-3 border border-ash/60 bg-noir p-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal/40">
             <div className="relative h-14 w-20 shrink-0 overflow-hidden bg-char">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={face(n)} alt="Self-tape still" className="duotone h-full w-full object-cover" />
-              <span className="absolute left-1 top-1 rec-dot h-1.5 w-1.5 rounded-full bg-rec" />
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-black/60 to-transparent" aria-hidden />
+              <span className="scrim-b pointer-events-none absolute inset-x-0 bottom-0 h-1/2" aria-hidden />
+              <span className="absolute left-1 top-1 flex items-center gap-1">
+                <span className="rec-dot h-1.5 w-1.5 rounded-full bg-rec" />
+                <span className="font-mono text-[0.5rem] font-medium uppercase tracking-[0.14em] text-rec">REC</span>
+              </span>
             </div>
             <div className="flex-1">
               <div className="flex gap-0.5">
                 {[1, 2, 3, 4, 5, 6].map((s) => (
-                  <Star key={s} className={`h-3 w-3 ${s <= (6 - i) ? "text-tungsten" : "text-ash-2"}`} fill={s <= (6 - i) ? "currentColor" : "none"} strokeWidth={1.5} />
+                  <Star key={s} className={`h-3 w-3 ${s <= (6 - i) ? "text-signal" : "text-ash-2"}`} fill={s <= (6 - i) ? "currentColor" : "none"} strokeWidth={1.5} />
                 ))}
               </div>
               <p className="slate mt-1">Take {i + 1} · 1:0{i + 2}</p>
             </div>
             <div className="flex gap-2 text-bone-faint">
-              <Download className="h-4 w-4 hover:text-bone" />
-              <Forward className="h-4 w-4 hover:text-bone" />
-              <MessageSquare className="h-4 w-4 hover:text-bone" />
+              <Download className="h-4 w-4 transition-colors hover:text-signal" />
+              <Forward className="h-4 w-4 transition-colors hover:text-signal" />
+              <MessageSquare className="h-4 w-4 transition-colors hover:text-signal" />
             </div>
           </div>
         ))}
@@ -310,8 +338,9 @@ function TapeGridMock() {
 
 function ChatMock() {
   return (
-    <div className="border border-ash/70 bg-noir-2 frame">
-      <div className="flex items-center gap-3 border-b border-ash/60 px-5 py-3">
+    <div className="frame relative border bg-noir-2">
+      <span className="brackets pointer-events-none absolute inset-0 opacity-60" aria-hidden />
+      <div className="flex items-center gap-3 border-b px-5 py-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={face(5)} alt="" className="duotone h-8 w-8 rounded-full object-cover" />
         <div>
@@ -323,12 +352,12 @@ function ChatMock() {
         <div className="max-w-[80%] border border-ash/50 bg-noir px-4 py-2.5 text-[0.86rem] text-bone-dim">
           Hi Saoirse — loved your tape for Máire. Could you come in Thursday?
         </div>
-        <div className="ml-auto max-w-[80%] border border-tungsten/30 bg-tungsten/[0.06] px-4 py-2.5 text-[0.86rem] text-bone">
+        <div className="ml-auto max-w-[80%] border border-signal/30 bg-signal/[0.06] px-4 py-2.5 text-[0.86rem] text-bone">
           Absolutely — Thursday works. Thank you! I&rsquo;ll be there.
         </div>
-        <div className="flex items-center gap-2 rounded border border-tungsten/25 bg-tungsten/[0.04] px-3 py-2">
-          <MessageSquare className="h-3.5 w-3.5 text-tungsten" />
-          <p className="slate text-tungsten/80">This conversation is also shared with the actor&rsquo;s agent</p>
+        <div className="flex items-center gap-2 border border-signal/25 bg-signal/[0.04] px-3 py-2">
+          <MessageSquare className="h-3.5 w-3.5 shrink-0 text-signal" strokeWidth={1.6} />
+          <p className="slate text-signal-ink/80">This conversation is also shared with the actor&rsquo;s agent</p>
         </div>
       </div>
     </div>

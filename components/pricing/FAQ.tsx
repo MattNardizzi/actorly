@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Stagger } from "@/components/fx/Reveal";
 
 const QA = [
   {
@@ -35,23 +36,38 @@ export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="mx-auto max-w-[800px] divide-y divide-ash/60 border-y border-ash/60">
+    <Stagger className="mx-auto max-w-[800px] divide-y border-y">
       {QA.map((item, i) => {
         const isOpen = open === i;
         return (
-          <div key={item.q}>
+          <div key={item.q} className="group">
             <button
               onClick={() => setOpen(isOpen ? null : i)}
-              className="flex w-full items-center justify-between gap-6 py-6 text-left"
+              className="flex w-full items-start justify-between gap-6 py-6 text-left"
               aria-expanded={isOpen}
             >
-              <span className={cn("font-display text-[1.15rem] font-light transition-colors", isOpen ? "text-tungsten" : "text-bone")}>
-                {item.q}
+              <span className="flex items-baseline gap-4">
+                <span
+                  className={cn(
+                    "inline-block w-6 shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.16em] transition-colors duration-500",
+                    isOpen ? "text-signal" : "text-bone-faint",
+                  )}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className={cn(
+                    "font-display text-[1.15rem] font-light tracking-[-0.02em] transition-colors duration-500",
+                    isOpen ? "text-signal-ink" : "text-bone-dim group-hover:text-bone",
+                  )}
+                >
+                  {item.q}
+                </span>
               </span>
               <Plus
                 className={cn(
-                  "h-5 w-5 shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                  isOpen ? "rotate-45 text-tungsten" : "text-bone-faint",
+                  "mt-1 h-5 w-5 shrink-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                  isOpen ? "rotate-45 text-signal" : "text-bone-faint group-hover:text-bone-dim",
                 )}
                 strokeWidth={1.5}
               />
@@ -63,7 +79,7 @@ export default function FAQ() {
               )}
             >
               <div className="overflow-hidden">
-                <p className="max-w-2xl text-[0.94rem] leading-relaxed text-bone-dim text-pretty">
+                <p className="ml-[1.5rem] max-w-2xl border-l border-signal/40 pl-[1rem] text-[0.94rem] leading-relaxed text-bone-dim text-pretty">
                   {item.a}
                 </p>
               </div>
@@ -71,6 +87,6 @@ export default function FAQ() {
           </div>
         );
       })}
-    </div>
+    </Stagger>
   );
 }

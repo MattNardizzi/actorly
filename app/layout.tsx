@@ -1,29 +1,32 @@
 import type { Metadata } from "next";
-import { Fraunces, Courier_Prime, Instrument_Sans } from "next/font/google";
+import { Archivo, Hanken_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 
 import SmoothScroll from "@/components/providers/SmoothScroll";
-import Grain from "@/components/fx/Grain";
 import CursorLight from "@/components/fx/CursorLight";
+import HUD from "@/components/fx/HUD";
 
-const fraunces = Fraunces({
+/* Archivo — technical grotesque. The voice: headlines, wordmark, big statements.
+   Ranges from tight-huge display to wide uppercase HUD. */
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-archivo",
   display: "swap",
   style: ["normal", "italic"],
 });
 
-const courier = Courier_Prime({
+/* Hanken Grotesk — clean neutral grotesque. Body, UI, forms, tables. */
+const hanken = Hanken_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-courier",
+  variable: "--font-hanken",
   display: "swap",
 });
 
-const instrument = Instrument_Sans({
+/* Martian Mono — wide technical mono. The instrument HUD: codes, coordinates,
+   takes, timecodes, the domain signature. */
+const martian = Martian_Mono({
   subsets: ["latin"],
-  variable: "--font-instrument",
+  variable: "--font-martian",
   display: "swap",
 });
 
@@ -68,21 +71,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${courier.variable} ${instrument.variable} antialiased`}
+      className={`${archivo.variable} ${hanken.variable} ${martian.variable} antialiased`}
       suppressHydrationWarning
     >
       <body>
-        {/* Global vignette — seats the whole site in the dark */}
-        <div
-          aria-hidden
-          className="pointer-events-none fixed inset-0 z-[65]"
-          style={{
-            background:
-              "radial-gradient(130% 100% at 50% 0%, transparent 55%, rgba(0,0,0,0.55) 100%)",
-          }}
-        />
-        <Grain />
         <CursorLight />
+        <HUD />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

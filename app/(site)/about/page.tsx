@@ -33,17 +33,18 @@ export default function About() {
         slateRight="EST. IRELAND"
       />
 
-      <section className="px-[var(--spacing-gutter)] pb-24 md:pb-32">
-        <div className="mx-auto max-w-[820px] space-y-8">
+      {/* ===================== STORY ===================== */}
+      <section className="relative px-[var(--spacing-gutter)] pb-24 md:pb-32">
+        <div className="mx-auto max-w-[820px] space-y-9">
           <Reveal>
-            <p className="font-display text-[clamp(1.5rem,3vw,2.2rem)] font-light leading-[1.3] text-bone text-balance">
+            <p className="font-display text-[clamp(1.5rem,3vw,2.2rem)] font-light leading-[1.3] tracking-[-0.02em] text-bone text-balance">
               For years, castandhire.ie quietly did the work — connecting Irish actors
               with the people casting them. It just never looked, or felt, like the
               talent it held.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="text-[1.02rem] leading-relaxed text-bone-dim text-pretty">
+            <p className="max-w-[64ch] text-[1.02rem] leading-relaxed text-bone-dim text-pretty">
               Actorly is that database reborn: the same roster, the same community, the
               same jobs — rebuilt from the studs into something an actor is proud to send
               and a casting director actually wants to open. Profiles that read like a
@@ -53,7 +54,7 @@ export default function About() {
             </p>
           </Reveal>
           <Reveal delay={0.15}>
-            <p className="text-[1.02rem] leading-relaxed text-bone-dim text-pretty">
+            <p className="max-w-[64ch] text-[1.02rem] leading-relaxed text-bone-dim text-pretty">
               We&rsquo;re not here to reinvent the industry. We&rsquo;re here to turn on the
               light — so every actor in Ireland can be seen, and everyone casting can see.
             </p>
@@ -61,8 +62,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="border-y border-ash/60 bg-noir-2 py-20">
+      {/* ===================== STATS ===================== */}
+      <section className="border-y bg-noir-2 py-20">
         <div className="mx-auto max-w-[1500px] px-[var(--spacing-gutter)]">
           <Stagger className="grid grid-cols-2 gap-10 md:grid-cols-4">
             <StatCounter value={STATS.actors} suffix="+" label="Actors on the roster" />
@@ -73,20 +74,35 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values */}
-      <section className="px-[var(--spacing-gutter)] py-24 md:py-32">
-        <div className="mx-auto max-w-[1500px]">
+      {/* ===================== VALUES ===================== */}
+      <section className="relative overflow-hidden px-[var(--spacing-gutter)] py-24 md:py-32">
+        <div
+          aria-hidden
+          className="grid-lines pointer-events-none absolute inset-0 opacity-[0.4] [mask-image:radial-gradient(90%_80%_at_50%_0%,black,transparent_74%)]"
+        />
+        <div className="relative mx-auto max-w-[1500px]">
           <Reveal className="mb-14">
             <Kicker index="02">What we hold to</Kicker>
-            <h2 className="mt-5 max-w-3xl font-display text-[clamp(1.9rem,4vw,3.2rem)] font-light leading-[1.05] text-bone text-balance">
+            <h2 className="mt-5 max-w-3xl font-display text-[clamp(1.9rem,4vw,3.2rem)] font-light leading-[1.05] tracking-[-0.03em] text-bone text-balance">
               Four things we refuse to compromise.
             </h2>
           </Reveal>
-          <Stagger className="grid gap-px overflow-hidden border border-ash/60 bg-ash/60 sm:grid-cols-2">
-            {VALUES.map((v) => (
-              <div key={v.title} className="group bg-noir-2 p-8 transition-colors duration-500 hover:bg-char md:p-10">
-                <v.icon className="h-7 w-7 text-tungsten" strokeWidth={1.3} />
-                <h3 className="mt-6 font-display text-[1.5rem] font-light text-bone">{v.title}</h3>
+          <Stagger className="grid gap-px overflow-hidden border sm:grid-cols-2">
+            {VALUES.map((v, i) => (
+              <div
+                key={v.title}
+                className="group relative bg-noir-2 p-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-char md:p-10"
+                style={{ boxShadow: "0 0 0 1px var(--line)" }}
+              >
+                <div className="mb-8 flex items-center justify-between">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-sm border border-ash-2 text-signal transition-colors duration-500 group-hover:border-signal/50">
+                    <v.icon className="h-5 w-5" strokeWidth={1.3} />
+                  </span>
+                  <span className="font-mono text-[0.7rem] text-bone-faint tracking-[0.14em]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h3 className="font-display text-[1.5rem] font-light tracking-[-0.02em] text-bone">{v.title}</h3>
                 <p className="mt-3 max-w-md text-[0.94rem] leading-relaxed text-bone-dim text-pretty">{v.body}</p>
               </div>
             ))}

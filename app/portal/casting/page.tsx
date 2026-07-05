@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  Search, Plus, Briefcase, Users, Mail, MessageSquare, X, Trash2, Send,
+  Search, Plus, Briefcase, Users, Mail, MessageSquare, Trash2, Send,
 } from "lucide-react";
 
 import PortalShell, { type NavItem } from "@/components/portal/PortalShell";
@@ -98,8 +98,8 @@ function PostJob() {
               key={o.l}
               onClick={() => setPaid(o.k)}
               className={cn(
-                "flex-1 border px-4 py-3 text-[0.86rem] transition-colors",
-                paid === o.k ? "border-tungsten/50 bg-tungsten/[0.05] text-bone" : "border-ash-2 text-bone-dim hover:text-bone",
+                "flex-1 border px-4 py-3 text-[0.86rem] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                paid === o.k ? "border-signal/50 bg-signal/[0.06] text-bone" : "border-ash-2 text-bone-dim hover:border-bone-faint hover:text-bone",
               )}
             >
               {o.l}
@@ -112,18 +112,18 @@ function PostJob() {
       </Section>
 
       <Section title="Roles" action={
-        <button onClick={() => setRoles((r) => [...r, { name: "", selfTape: true }])} className="inline-flex items-center gap-1.5 text-[0.78rem] text-tungsten hover:text-tungsten-soft">
+        <button onClick={() => setRoles((r) => [...r, { name: "", selfTape: true }])} className="inline-flex items-center gap-1.5 text-[0.78rem] text-signal transition-colors hover:text-signal-ink">
           <Plus className="h-4 w-4" /> Add role
         </button>
       }>
         <div className="space-y-4">
           {roles.map((role, i) => (
-            <div key={i} className="border border-ash/60 bg-noir p-4">
+            <div key={i} className="border bg-noir p-4 transition-colors duration-500 hover:border-signal/30">
               <div className="mb-3 flex items-center justify-between">
                 <span className="kicker">Role {String(i + 1).padStart(2, "0")}</span>
                 {roles.length > 1 && (
                   <button onClick={() => setRoles((r) => r.filter((_, j) => j !== i))} aria-label="Remove role">
-                    <Trash2 className="h-4 w-4 text-bone-faint hover:text-rec" />
+                    <Trash2 className="h-4 w-4 text-bone-faint transition-colors hover:text-rec" />
                   </button>
                 )}
               </div>
@@ -156,18 +156,18 @@ function PostJob() {
             { k: "independent", l: "Independent actors only", n: "3,902 eligible" },
             { k: "agented", l: "Agented actors only", n: "4,312 eligible" },
           ].map((o) => (
-            <button key={o.k} onClick={() => setSendTo(o.k)} className={cn("flex w-full items-center gap-4 border p-4 text-left transition-colors", sendTo === o.k ? "border-tungsten/50 bg-tungsten/[0.05]" : "border-ash-2 hover:border-bone-faint")}>
-              <span className={cn("flex h-5 w-5 items-center justify-center rounded-full border", sendTo === o.k ? "border-tungsten" : "border-ash-2")}>
-                {sendTo === o.k && <span className="h-2.5 w-2.5 rounded-full bg-tungsten" />}
+            <button key={o.k} onClick={() => setSendTo(o.k)} className={cn("flex w-full items-center gap-4 border p-4 text-left transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]", sendTo === o.k ? "border-signal/50 bg-signal/[0.06]" : "border-ash-2 hover:border-bone-faint")}>
+              <span className={cn("flex h-5 w-5 items-center justify-center rounded-full border transition-colors", sendTo === o.k ? "border-signal" : "border-ash-2")}>
+                {sendTo === o.k && <span className="h-2.5 w-2.5 rounded-full bg-signal" />}
               </span>
               <span className="flex-1 text-[0.9rem] text-bone">{o.l}</span>
-              <span className="font-mono text-[0.7rem] text-bone-faint">{o.n}</span>
+              <span className="font-mono text-[0.7rem] tabular-nums text-bone-faint">{o.n}</span>
             </button>
           ))}
         </div>
         <div className="mt-4 flex items-center justify-end gap-3">
-          <button className="rounded-full border border-ash-2 px-5 py-3 text-[0.8rem] text-bone-dim hover:text-bone">Save draft</button>
-          <button className="inline-flex items-center gap-2 rounded-full bg-tungsten px-6 py-3 text-[0.82rem] font-medium text-noir hover:bg-tungsten-soft">
+          <button className="rounded-full border border-ash-2 px-5 py-3 text-[0.8rem] text-bone-dim transition-colors hover:border-signal/50 hover:text-bone">Save draft</button>
+          <button className="inline-flex items-center gap-2 rounded-full bg-tungsten px-6 py-3 text-[0.82rem] font-medium text-noir transition-colors hover:bg-tungsten-soft">
             <Send className="h-4 w-4" /> Post job
           </button>
         </div>
@@ -181,20 +181,20 @@ function MyJobs({ onView }: { onView: () => void }) {
   return (
     <div className="space-y-4">
       {JOBS.map((j) => (
-        <div key={j.id} className="flex flex-wrap items-center justify-between gap-4 border border-ash/60 bg-noir-2 p-5">
+        <div key={j.id} className="group flex flex-wrap items-center justify-between gap-4 border bg-noir-2 p-5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-signal/40">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-display text-[1.3rem] font-light text-bone">{j.title}</h3>
+              <h3 className="font-display text-[1.3rem] font-light tracking-[-0.02em] text-bone">{j.title}</h3>
               {j.paid ? <Tag tone="light">Paid</Tag> : <Tag>Pro-bono</Tag>}
             </div>
             <p className="slate mt-1">{j.category} · {j.roles.length} roles · deadline {new Date(j.deadline).toLocaleDateString("en-IE", { day: "numeric", month: "short" })}</p>
           </div>
           <div className="flex items-center gap-5">
             <div className="text-right">
-              <p className="font-display text-[1.6rem] font-light text-tungsten">{j.applicants}</p>
+              <p className="font-display text-[1.6rem] font-light tabular-nums text-signal-ink">{j.applicants}</p>
               <p className="slate">applicants</p>
             </div>
-            <button onClick={onView} className="rounded-full border border-ash-2 px-5 py-2.5 text-[0.78rem] text-bone transition-colors hover:border-tungsten hover:text-tungsten">
+            <button onClick={onView} className="rounded-full border border-ash-2 px-5 py-2.5 text-[0.78rem] text-bone transition-colors hover:border-signal/60 hover:text-signal-ink">
               View
             </button>
           </div>
@@ -216,29 +216,33 @@ function Messages() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
-      <div className="border border-ash/60 bg-noir-2">
-        <div className="border-b border-ash/60 px-5 py-4"><span className="kicker">Inbox</span></div>
-        <div className="divide-y divide-ash/40">
+      <div className="border bg-noir-2">
+        <div className="border-b px-5 py-4"><span className="kicker">Inbox</span></div>
+        <div className="divide-y divide-[color:var(--line)]">
           {threads.map((t) => (
             <button
               key={t.id}
               onClick={() => setActive(t)}
-              className={cn("flex w-full items-center gap-3 px-5 py-4 text-left transition-colors", active.id === t.id ? "bg-char" : "hover:bg-char/60")}
+              className={cn("group relative flex w-full items-center gap-3 px-5 py-4 text-left transition-colors", active.id === t.id ? "bg-char" : "hover:bg-char/60")}
             >
+              <span
+                className={cn("absolute inset-y-3 left-0 w-px transition-colors duration-500", active.id === t.id ? "bg-signal" : "bg-transparent")}
+                aria-hidden
+              />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={face(t.img)} alt="" className="duotone h-10 w-10 rounded-full object-cover" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[0.88rem] text-bone">{t.name}</p>
                 <p className="slate truncate">{t.last}</p>
               </div>
-              {t.unread && <span className="h-2 w-2 shrink-0 rounded-full bg-tungsten" />}
+              {t.unread && <span className="signal-dot h-2 w-2 shrink-0 rounded-full bg-signal" />}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex min-h-[520px] flex-col border border-ash/60 bg-noir-2">
-        <div className="flex items-center gap-3 border-b border-ash/60 px-5 py-4">
+      <div className="flex min-h-[520px] flex-col border bg-noir-2">
+        <div className="flex items-center gap-3 border-b px-5 py-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={face(active.img)} alt="" className="duotone h-9 w-9 rounded-full object-cover" />
           <div>
@@ -247,22 +251,22 @@ function Messages() {
           </div>
         </div>
         <div className="flex-1 space-y-3 p-5">
-          <div className="max-w-[75%] border border-ash/50 bg-noir px-4 py-2.5 text-[0.86rem] text-bone-dim">
+          <div className="max-w-[75%] border border-[color:var(--line-strong)] bg-noir px-4 py-2.5 text-[0.86rem] text-bone-dim">
             Hi {active.name.split(" ")[0]} — really strong tape. Could you come in Thursday?
           </div>
-          <div className="ml-auto max-w-[75%] border border-tungsten/30 bg-tungsten/[0.06] px-4 py-2.5 text-[0.86rem] text-bone">
+          <div className="ml-auto max-w-[75%] border border-signal/30 bg-signal/[0.07] px-4 py-2.5 text-[0.86rem] text-bone">
             {active.last}
           </div>
           {active.agent && (
-            <div className="flex items-center gap-2 rounded border border-tungsten/25 bg-tungsten/[0.04] px-3 py-2">
-              <MessageSquare className="h-3.5 w-3.5 text-tungsten" />
-              <p className="slate text-tungsten/80">This conversation is also shared with {active.agent}</p>
+            <div className="flex items-center gap-2 rounded-[2px] border border-signal/25 bg-signal/[0.05] px-3 py-2">
+              <MessageSquare className="h-3.5 w-3.5 text-signal" />
+              <p className="slate text-signal-ink/80">This conversation is also shared with {active.agent}</p>
             </div>
           )}
         </div>
-        <div className="flex items-center gap-3 border-t border-ash/60 p-4">
+        <div className="flex items-center gap-3 border-t p-4">
           <input className="input flex-1" placeholder="Write a message…" />
-          <button className="flex h-10 w-10 items-center justify-center rounded-full bg-tungsten text-noir hover:bg-tungsten-soft" aria-label="Send">
+          <button className="flex h-10 w-10 items-center justify-center rounded-full bg-tungsten text-noir transition-colors hover:bg-tungsten-soft" aria-label="Send">
             <Send className="h-4 w-4" />
           </button>
         </div>
@@ -274,8 +278,8 @@ function Messages() {
 /* ---------------- shared bits ---------------- */
 function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="border border-ash/60 bg-noir-2">
-      <div className="flex items-center justify-between border-b border-ash/60 px-5 py-4">
+    <div className="border bg-noir-2">
+      <div className="flex items-center justify-between border-b px-5 py-4">
         <span className="kicker">{title}</span>
         {action}
       </div>

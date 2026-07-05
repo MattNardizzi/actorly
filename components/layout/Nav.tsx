@@ -51,11 +51,12 @@ export default function Nav() {
         className={cn(
           "fixed inset-x-0 top-0 z-[90] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
           scrolled
-            ? "border-b border-ash/70 bg-noir/72 backdrop-blur-xl"
+            ? "glass border-b"
             : "border-b border-transparent bg-transparent",
         )}
+        style={scrolled ? undefined : { backdropFilter: "none" }}
       >
-        <nav className="mx-auto flex h-[72px] max-w-[1500px] items-center justify-between px-[var(--spacing-gutter)]">
+        <nav className="mx-auto flex h-[68px] max-w-[1600px] items-center justify-between px-[var(--spacing-gutter)]">
           <Wordmark />
 
           <div className="hidden items-center gap-9 md:flex">
@@ -66,8 +67,8 @@ export default function Nav() {
                   key={l.href}
                   href={l.href}
                   className={cn(
-                    "link-underline text-[0.82rem] tracking-wide transition-colors duration-300",
-                    active ? "text-tungsten" : "text-bone-dim hover:text-bone",
+                    "link-underline text-[0.8rem] tracking-[0.01em] transition-colors duration-300",
+                    active ? "text-signal" : "text-bone-dim hover:text-bone",
                   )}
                 >
                   {l.label}
@@ -79,11 +80,11 @@ export default function Nav() {
           <div className="hidden items-center gap-5 md:flex">
             <Link
               href="/login"
-              className="link-underline text-[0.82rem] tracking-wide text-bone-dim transition-colors hover:text-bone"
+              className="link-underline text-[0.8rem] tracking-[0.01em] text-bone-dim transition-colors hover:text-bone"
             >
               Log in
             </Link>
-            <Button href="/join" arrow className="px-5 py-2.5 text-[0.78rem]">
+            <Button href="/join" arrow className="px-5 py-2.5 text-[0.76rem]">
               Join Actorly
             </Button>
           </div>
@@ -107,7 +108,7 @@ export default function Nav() {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[100] flex flex-col bg-noir/98 backdrop-blur-2xl md:hidden"
           >
-            <div className="flex h-[72px] items-center justify-between px-[var(--spacing-gutter)]">
+            <div className="flex h-[68px] items-center justify-between px-[var(--spacing-gutter)]">
               <Wordmark />
               <button
                 className="flex h-10 w-10 items-center justify-center text-bone"
@@ -132,9 +133,9 @@ export default function Nav() {
                 >
                   <Link
                     href={l.href}
-                    className="block border-b border-ash/50 py-4 font-display text-[2rem] text-bone"
+                    className="flex items-baseline gap-4 border-b py-4 font-display text-[2rem] font-medium tracking-[-0.02em] text-bone"
                   >
-                    <span className="slate mr-4 align-middle text-tungsten">
+                    <span className="slate text-signal">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     {l.label}

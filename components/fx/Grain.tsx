@@ -28,20 +28,21 @@ const fragment = /* glsl */ `
   }
 
   void main() {
-    // Chunky, film-like grain sampled in device space.
+    // Fine, cold sensor grain sampled in device space.
     vec2 st = vUv * uResolution * 0.5;
     float g = hash(st + uTime * 57.0);
-    // Bias toward mid-grey so overlay blend reads as luminance flicker.
-    float v = mix(0.35, 0.85, g);
+    // Bias toward mid-grey so overlay reads as a faint luminance flicker.
+    float v = mix(0.4, 0.8, g);
     gl_FragColor = vec4(vec3(v), uOpacity);
   }
 `;
 
 /**
- * Live WebGL film grain over the entire site. Advanced at ~24fps (film cadence)
- * rather than 60 — the flicker feels like real stock. Freezes on reduced motion.
+ * Live WebGL sensor grain over the entire site. Advanced at ~24fps (film cadence)
+ * rather than 60 — the flicker reads like real capture. Freezes on reduced motion.
+ * Cooler and lighter than the v1 stock — a whisper of texture, not a filter.
  */
-export default function Grain({ opacity = 0.5 }: { opacity?: number }) {
+export default function Grain({ opacity = 0.42 }: { opacity?: number }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -108,7 +109,7 @@ export default function Grain({ opacity = 0.5 }: { opacity?: number }) {
     <div
       ref={ref}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[70] mix-blend-overlay opacity-[0.5]"
+      className="pointer-events-none fixed inset-0 z-[70] opacity-[0.4] mix-blend-soft-light"
       style={{ contain: "strict" }}
     />
   );

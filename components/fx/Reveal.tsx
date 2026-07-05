@@ -1,20 +1,70 @@
 "use client";
 
-import { useRef, type ElementType, type ReactNode } from "react";
-import { registerGsap, gsap, SplitText, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { prefersReducedMotion } from "@/lib/gsap";
+import { cn } from "@/lib/utils";
+
+/* CSS-driven reveals, IO-triggered, FAIL-VISIBLE.
+   JS only toggles classes: .rv-pre (start position, added just before observing)
+   and .rv-in (settled, added on viewport entry). The motion itself is a CSS
+   transition on the cine curve — it cannot be stalled by any JS ticker, is
+   immune to Strict-Mode double effects and HMR, and if JS never runs the
+   content is simply visible. See globals.css "Reveal primitives". */
+
+const useReveal = (
+  ref: React.RefObject<HTMLElement | null>,
+  prep: (el: HTMLElement) => void,
+) => {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+    if (el.classList.contains("rv-in")) return; // already revealed (HMR/remount)
+
+    prep(el);
+    el.classList.add("rv-pre");
+    // Commit the start state before observing so the transition can run.
+    void el.offsetHeight;
+
+    let done = false;
+    const fire = () => {
+      if (done) return;
+      done = true;
+      el.classList.add("rv-in");
+      obs.disconnect();
+    };
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) fire();
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+    );
+    obs.observe(el);
+    // Above-the-fold: fire next frame if already in view (IO's initial callback
+    // can be missed under React Strict-Mode double effects).
+    const rafId = requestAnimationFrame(() => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.94 && r.bottom > 0) fire();
+    });
+
+    return () => {
+      done = true;
+      cancelAnimationFrame(rafId);
+      obs.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+};
 
 /* -------------------------------------------------------------------------- */
-/*  TextReveal — headline lines rise out of a mask, staggered. The signature.  */
+/*  TextReveal — a headline line rises out of a clip mask. The signature.      */
+/*  Compose one per line (the call sites already do) for the cascade.          */
 /* -------------------------------------------------------------------------- */
 export function TextReveal({
   as: Tag = "span",
   children,
   className,
   delay = 0,
-  stagger = 0.09,
   duration = 1.15,
-  start = "top 88%",
-  once = true,
 }: {
   as?: ElementType;
   children: ReactNode;
@@ -27,38 +77,14 @@ export function TextReveal({
 }) {
   const ref = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      registerGsap();
-      const el = ref.current;
-      if (!el || prefersReducedMotion()) return;
-
-      const split = new SplitText(el, { type: "lines", mask: "lines" });
-      gsap.set(el, { autoAlpha: 1 });
-      gsap.from(split.lines, {
-        yPercent: 118,
-        duration,
-        ease: "cine",
-        stagger,
-        delay,
-        scrollTrigger: once
-          ? { trigger: el, start }
-          : { trigger: el, start, toggleActions: "restart none none reverse" },
-      });
-
-      return () => split.revert();
-    },
-    { scope: ref },
-  );
+  useReveal(ref, (el) => {
+    el.style.setProperty("--rv-dur", `${duration}s`);
+    el.style.setProperty("--rv-delay", `${delay}s`);
+  });
 
   return (
-    <Tag
-      ref={ref}
-      className={className}
-      style={{ visibility: "hidden" }}
-      data-reveal-text
-    >
-      {children}
+    <Tag ref={ref} className={cn("rv-mask", className)} data-reveal-text>
+      <span className="rv-line">{children}</span>
     </Tag>
   );
 }
@@ -72,7 +98,6 @@ export function Reveal({
   y = 44,
   delay = 0,
   duration = 1.0,
-  start = "top 90%",
 }: {
   children: ReactNode;
   className?: string;
@@ -83,25 +108,14 @@ export function Reveal({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      registerGsap();
-      const el = ref.current;
-      if (!el || prefersReducedMotion()) return;
-      gsap.from(el, {
-        autoAlpha: 0,
-        y,
-        duration,
-        ease: "cine",
-        delay,
-        scrollTrigger: { trigger: el, start },
-      });
-    },
-    { scope: ref },
-  );
+  useReveal(ref, (el) => {
+    el.style.setProperty("--rv-y", `${y}px`);
+    el.style.setProperty("--rv-dur", `${duration}s`);
+    el.style.setProperty("--rv-delay", `${delay}s`);
+  });
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={cn("rv-block", className)}>
       {children}
     </div>
   );
@@ -115,7 +129,6 @@ export function Stagger({
   className,
   y = 40,
   stagger = 0.08,
-  start = "top 85%",
 }: {
   children: ReactNode;
   className?: string;
@@ -125,24 +138,13 @@ export function Stagger({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      registerGsap();
-      const el = ref.current;
-      if (!el || prefersReducedMotion()) return;
-      const kids = Array.from(el.children);
-      if (!kids.length) return;
-      gsap.from(kids, {
-        autoAlpha: 0,
-        y,
-        duration: 1,
-        ease: "cine",
-        stagger,
-        scrollTrigger: { trigger: el, start },
-      });
-    },
-    { scope: ref },
-  );
+  useReveal(ref, (el) => {
+    el.style.setProperty("--rv-y", `${y}px`);
+    Array.from(el.children).forEach((kid, i) => {
+      kid.classList.add("rv-kid");
+      (kid as HTMLElement).style.transitionDelay = `${i * stagger}s`;
+    });
+  });
 
   return (
     <div ref={ref} className={className}>
